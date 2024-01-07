@@ -1,0 +1,12 @@
+.cp-index{
+    display: flex;
+    min-height: 85vh;
+    min-width: fit-content;
+}
+
+.cp-index-content{
+    display: flex;
+  width: 100%;
+  /* align-items: center; */
+  justify-content: center;
+}
