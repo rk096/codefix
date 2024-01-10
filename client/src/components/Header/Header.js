@@ -33,10 +33,11 @@ function Header() {
           User === null ?
           <Link to='/Auth' className='nav-item nav-links'>Log In</Link> :
           <>
-          <Link to='/'> <Avatar backgroundColor='#009dff' px="10px" py="7px" borderRadius="50%" color="white"> 
-           y
+         <Avatar backgroundColor='#009dff' px="10px" py="15px" borderRadius="50%" color="white"> 
+         <Link to='/User' style={{color:'white', textDecoration:'none' 
+         }} >  y</Link>
           </Avatar>
-          </Link>
+          
           <Link className='nav-item nav-links'>Log out</Link>
           </>
         }

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Routes, Redirect } from 'react-
 import Cpform from './components/Cpform'
 import ViewQuestion from './components/ViewQuestion'
 import AddQuestions from './components/AddQuestions'
+import Auth  from './components/Auth/Auth';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
          
           <Route exact path='/add-question' Component={AddQuestions} />
           <Route exact path='/question' Component={ViewQuestion} />
+          <Route exact path='/Auth' Component={Auth} />
           <Route exact path='/' Component={Cpform} />
         </Routes>
       </Router>
