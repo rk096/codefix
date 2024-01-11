@@ -1,18 +1,34 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import AllQuestions from './AllQuestions';
 import FilterListIcon from "@material-ui/icons/FilterList";
 import './css/main.css';
+import { AuthContext } from '../../App';
 
 function Main() {
+
+  const user = useContext(AuthContext);
+
     return (
         <div className="main">
         <div className="main-container">
           <div className="main-top">
             <h2>All Questions</h2>
-            <Link to="/add-question">
+            {
+              user ? (<>
+
+                <Link to="/add-question">
               <button>Ask Question</button>
             </Link>
+
+              </>) : (<>
+
+                <Link to="/auth">
+              <button>Ask Question</button>
+            </Link>
+              </>)
+            }
+           
   
           </div>
           <div className="main-desc">

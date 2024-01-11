@@ -1,24 +1,94 @@
-import React from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
-import { BrowserRouter as Router, Switch, Route, Routes, Redirect } from 'react-router-dom';
-import Cpform from './components/Cpform'
-import ViewQuestion from './components/ViewQuestion'
-import AddQuestions from './components/AddQuestions'
-import Auth  from './components/Auth/Auth';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Cpform from './components/Cpform';
+import ViewQuestion from './components/ViewQuestion';
+import AddQuestions from './components/AddQuestions';
+import Auth from './components/Auth/Auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, logout, selectUser } from './features/userSlice';
+import { auth } from './firebase';
+
+// Create a context to manage authentication state globally
+export const AuthContext = createContext();
+
+const AuthProvider = ({ children }) => {
+  const [authUser, setAuthUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({
+          uid: user.uid,
+          photo: user.photoURL,
+          displayName: user.displayName,
+          email: user.email,
+        });
+      } else {
+        setAuthUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return <AuthContext.Provider value={authUser}>{children}</AuthContext.Provider>;
+};
 
 function App() {
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        dispatch(
+          login({
+            uid: authUser.uid,
+            photo: authUser.photoURL,
+            displayName: authUser.displayName,
+            email: authUser.email,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
+  }, [dispatch]);
+
   return (
     <div className="App">
       <Router>
-        <Header />
-        <Routes>
-         
-          <Route exact path='/add-question' Component={AddQuestions} />
-          <Route exact path='/question' Component={ViewQuestion} />
-          <Route exact path='/Auth' Component={Auth} />
-          <Route exact path='/' Component={Cpform} />
-        </Routes>
+        <AuthProvider>
+          <Header />
+          <Routes>
+            <Route
+              path="/auth"
+              element={
+                user ? <Navigate to="/" />: <Auth />
+              }
+            />
+            <Route
+              path="/add-question"
+              element={
+                user ? <AddQuestions /> : <Navigate to="/auth" />
+              }
+            />
+            <Route
+              path="/question"
+              element={
+                user ? <ViewQuestion /> : <Navigate to="/auth" />
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <Cpform />
+              }
+            />
+          </Routes>
+        </AuthProvider>
       </Router>
     </div>
   );

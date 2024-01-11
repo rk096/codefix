@@ -1,11 +1,53 @@
 .auth-section {
     min-height: 100vh;
     margin: 0% auto;
-    background-color: #e0e2e3;
+    background-color: #e7eaec;
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
 }
+
+.auth-options{
+    display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.sign-options {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .single-option {
+    display: flex;
+    padding: 9px;
+    margin: 5px 0;
+    border-radius: 3px;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(66, 42, 42, 0.19);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .single-option:hover {
+    box-shadow: 0 4px 8px 0 #0095ff15, 0 6px 20px 0 #0095ff52;
+  }
+  
+  .single-option > p {
+    margin-left: 10px;
+  }
+  .single-option > img {
+    width: 35px;
+    height: 45px;
+  }
 
 .auth-container {
     min-width: 20%;
@@ -53,7 +95,7 @@
 
 .auth-container form label p {
     font-size: 13px;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 4px;
 }
 

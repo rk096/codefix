@@ -1,14 +1,29 @@
-import React from 'react'
+import React , {useContext}from 'react'
 import './css/Header.css'
 import SearchIcon from '@mui/icons-material/Search';
 import InboxIcon from '@mui/icons-material/Inbox';
 // import { Avatar } from '@mui/material';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Avatar from '../Avatar/Avatar';
+import { AuthContext } from '../../App';
+import {
+  signOut
+} from "firebase/auth";
+import { auth } from '../../firebase.js'; 
 
 function Header() {
 
-  var User = null;
+  const navigate = useNavigate();
+  const user = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/auth');
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
+  };
 
   return (
     <header>
@@ -29,18 +44,16 @@ function Header() {
       </div>
       <div className='header-right'>
         <div className='header-right-container'>
-        {
-          User === null ?
-          <Link to='/Auth' className='nav-item nav-links'>Log In</Link> :
-          <>
-         <Avatar backgroundColor='#009dff' px="10px" py="15px" borderRadius="50%" color="white"> 
-         <Link to='/User' style={{color:'white', textDecoration:'none' 
-         }} >  y</Link>
-          </Avatar>
-          
-          <Link className='nav-item nav-links'>Log out</Link>
-          </>
-        }
+        {user ? (
+              <>
+                <Avatar backgroundColor='#009dff' px="10px" py="15px" borderRadius="50%" color="white">
+                  <Link to='/User' style={{ color: 'white', textDecoration: 'none' }}>y</Link>
+                </Avatar>
+                <Link onClick={handleLogout} className='nav-item nav-links'>Log out</Link>
+              </>
+            ) : (
+              <Link to='/auth' className='nav-item nav-links'>Log In</Link>
+            )}
          
           <InboxIcon />
           <svg
