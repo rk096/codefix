@@ -1,0 +1,22 @@
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #007cd446;
+    color: black;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-icon {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .title {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+    font-size: 0.9rem;
+  }
+  

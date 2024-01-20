@@ -1,0 +1,151 @@
+.auth-section {
+    min-height: 100vh;
+    margin: 0% auto;
+    background-color: #e7eaec;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-options{
+    display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.sign-options {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .single-option {
+    display: flex;
+    padding: 9px;
+    margin: 5px 0;
+    border-radius: 3px;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(66, 42, 42, 0.19);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .single-option:hover {
+    box-shadow: 0 4px 8px 0 #0095ff15, 0 6px 20px 0 #0095ff52;
+  }
+  
+  .single-option > p {
+    margin-left: 10px;
+  }
+  .single-option > img {
+    width: 35px;
+    height: 45px;
+  }
+
+.auth-container {
+    min-width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo {
+    padding: 20px 30px;
+}
+
+.auth-container form {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    box-shadow: 0 10px 25px rgb(0 0 0 / 5%),
+        0 20px 48px rgb(0 0 0 / 5%),
+        0 1px 4px rgb(0 0 0 / 10%);
+
+}
+
+.auth-container label input {
+    padding: 10px;
+    width: calc(100% - 30px);
+    border: solid 1px #000000ee;
+    font-size: 13px;
+}
+
+
+.auth-container form label p.forgot-password {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.auth-container form label h4 {
+    text-align: left;
+    margin: 5px 10px 5px 0;
+}
+
+.auth-container form label p {
+    font-size: 13px;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.auth-container form label:nth-child(1) h4,
+.auth-container form label:nth-child(2) h4,
+.auth-container form label:nth-child(4) h4 {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.auth-container form label p.forgot-password {
+    color: #007ac6;
+    font-size: 13px;
+    text-align: right;
+    margin-left: auto;
+    margin-top: 10px;
+}
+
+
+.auth-btn {
+    margin-top: 10px;
+    padding: 10px 5px;
+    background-color: #009dff;
+    border: solid 1px #009dff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.auth-btn:hover {
+    background-color: #018ce3;
+}
+
+.handle-switch-btn {
+    background-color: transparent;
+    color: #007ac6;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.handle-switch-btn:hover {
+    background-color: transparent;
+}
+
+.pass {
+    display: flex;
+    justify-content: center;
+}
