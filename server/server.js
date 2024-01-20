@@ -1,35 +1,28 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-require('dotenv').config();
-
-import UserRoutes from './routes/Users.js';
-
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
-const PORT = 8080;
+const path = require("path");
 
-// console.log(process.env);
+const db = require("./DatabaseConnection.js");
+const authRouter = require("./routes/AuthRoutes.js");
+const questionRouter = require("./routes/QuestionRoutes.js");
+const userRouter = require("./routes/UserRoutes.js");
+const answerRouter = require("./routes/AnswerRoutes.js");
+const commentRouter = require("./routes/CommentRoutes.js");
+const blogRouter = require("./routes/BlogRoutes.js");
+
+const PORT = process.env.PORT || 80
 
 // DB connection
-const CONNECTION_URL = "mongodb+srv://richakamani32:23112003@codehub.j7wwepp.mongodb.net/?retryWrites=true&w=majority";
-//console.log('Connection URL:', process.env.URL);
-
-//const CONNECTION_URL = process.env.URL;
-
-mongoose
-  .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log(`server running on port ${PORT}`);
-  })
-  .catch((error) => console.log(error.message));
+db.connect();
 
 
 // Middleware
 app.use(bodyParser.json({limit: "50mb"}))
 app.use(bodyParser.urlencoded({ extended : true, limit: "50mb"}))
+app.use(express.json())
 
-app.use(express.json());
 
 // Headers
 app.use((req, res, next) => {
@@ -40,8 +33,12 @@ app.use((req, res, next) => {
 
 
 // API
-
-
+app.use('/auth/', authRouter);
+app.use("/codehub/question", questionRouter);
+app.use("/codehub/user", userRouter);
+app.use("/codehub/comment", commentRouter);
+app.use("/codehub/blog", blogRouter);
+app.use("/codehub/answer", answerRouter);
 
 // Static resources
 // app.use('/upload', express.static(path.join(__dirname, '/../uploads')))
@@ -60,10 +57,9 @@ app.use((req, res, next) => {
 app.use(cors())
 
 app.get('/', (req,res)=>{
-    res.send("this is a code hub");
+    res.send("welcome to code hub");
 })
 
-app.use('/user', UserRoutes);
 
 // Server listens
 app.listen(PORT, () => {

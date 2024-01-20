@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-import Users from '../models/user,js';
+import Users from '../models/User';
 
 export const signup = async(req,res)=>{
-    const{ name, email, password} = req.body;
+    const{ username, email, password} = req.body;
     try{
         const existinguser = await Users.findOne({email});
         if(existinguser){
@@ -11,7 +11,7 @@ export const signup = async(req,res)=>{
         }
 
         const hashPassword = await bcrypt.hash(password,12);
-        const newUser = await Users.create({name, email ,password:hashPassword});
+        const newUser = await Users.create({username, email ,password:hashPassword});
         const token = jwt.sign({email:newUser.email, id:newUser.id}, "test", {expiersIn : '1h'});
         res.status(200).json({ result: newUser, token})
     }
