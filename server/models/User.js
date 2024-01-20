@@ -6,29 +6,26 @@ const userSchema = new mongoose.Schema({
     password: String,
     bio: String,
     links: [
-        {link: String}
+        {type: String}
     ],
     profilepic: String,
     questions: [
-        {question: {
+        {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Question"
         }
-    }
     ],
     answers: [
-        {answer: {
+        {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Answer"
         }
-    }
     ],
     blogs: [
-        {blog: {
+        {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Blog"
         }
-    }
     ]
 })
 
