@@ -13,11 +13,11 @@ function Sidebar() {
 
                     </div>
                     <div className='sidebar-option'>
-                        <Link>Users</Link>
+                        <Link to='/users'>Users</Link>
                     </div>
 
                     <div className='sidebar-option'>
-                        <Link>Blog</Link>
+                        <Link to='/blog'>Blog</Link>
                     </div>
 
                     <div className='sidebar-option'>

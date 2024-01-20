@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Cpform from './components/Cpform';
 import ViewQuestion from './components/ViewQuestion';
 import AddQuestions from './components/AddQuestions';
+import AddBlog from './components/AddBlog';
 import Auth from './components/Auth/Auth';
+import Users from './components/Users/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from './features/userSlice';
 import { auth } from './firebase';
@@ -79,6 +81,18 @@ function App() {
               path="/question"
               element={
                 user ? <ViewQuestion /> : <Navigate to="/auth" />
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                user ? <AddBlog /> : <Navigate to="/auth" />
+              }
+            />
+             <Route
+              path="/users"
+              element={
+                user ? <Users /> : <Navigate to="/auth" />
               }
             />
             <Route

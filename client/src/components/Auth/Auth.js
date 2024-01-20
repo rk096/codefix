@@ -38,16 +38,19 @@ const Auth = () => {
       setError("Required field is missing");
       setLoading(false);
     }
-    else{
-      createUserWithEmailAndPassword(auth,email,password ).then((res) => {
-        console.log(res);
-        setLoading(false);
-      }).catch((error) => {
-        console.log(error.code);
-        setError(error.message);
-        setLoading(false);
-      });
-
+    else {
+     
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error creating user:', error.code, error.message);
+          setError(error.message);
+          setLoading(false);
+        });
     }
   };
 
@@ -125,7 +128,7 @@ const Auth = () => {
           
 
           <button onClick={isSignup ? handleRegister : handleSignIn} type='submit' className='auth-btn' disabled={loading}>
-          {loading ?  (isSignup ? 'Signing....' : 'Loging..') : (isSignup ? 'Sign up' : 'Log in')}
+          {loading ?  (isSignup ? 'Signing....' : 'Loging...') : (isSignup ? 'Sign up' : 'Log in')}
           </button>
         </form>
         <p>

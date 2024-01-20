@@ -47,7 +47,7 @@ function Header() {
         {user ? (
               <>
                 <Avatar backgroundColor='#009dff' px="10px" py="15px" borderRadius="50%" color="white">
-                  <Link to='/User' style={{ color: 'white', textDecoration: 'none' }}>y</Link>
+                  <Link to='/user' style={{ color: 'white', textDecoration: 'none' }}>y</Link>
                 </Avatar>
                 <Link onClick={handleLogout} className='nav-item nav-links'>Log out</Link>
               </>
