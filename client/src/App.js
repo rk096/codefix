@@ -6,6 +6,7 @@ import Cpform from './components/Cpform';
 import ViewQuestion from './components/ViewQuestion';
 import AddQuestions from './components/AddQuestions';
 import AddBlog from './components/AddBlog';
+import ViewBlog from './components/ViewBlog';
 import Auth from './components/Auth/Auth';
 import Users from './components/Users/Users';
 import { useDispatch, useSelector } from 'react-redux';
@@ -83,16 +84,28 @@ function App() {
                 user ? <ViewQuestion /> : <Navigate to="/auth" />
               }
             />
+             <Route
+              path="/users"
+              element={
+                user ? <Users /> : <Navigate to="/auth" />
+              }
+            />
             <Route
               path="/blog"
+              element={
+                user ? <ViewBlog /> : <Navigate to="/auth" />
+              }
+            />
+             <Route
+              path="/add-blog"
               element={
                 user ? <AddBlog /> : <Navigate to="/auth" />
               }
             />
              <Route
-              path="/users"
+              path="/blogs"
               element={
-                user ? <Users /> : <Navigate to="/auth" />
+                <Cpform /> 
               }
             />
             <Route

@@ -1,4 +1,4 @@
-.all-questions {
+.all-blogs {
     display: flex;
     /* flex-direction: column; */
     width: 100%;
@@ -7,7 +7,7 @@
     width: 100%;
   }
   
-  .all-questions-container {
+  .all-blogs-container {
     display: flex;
     flex-direction: column;
     flex-direction: row;
@@ -16,7 +16,7 @@
     width: 100%;
   }
   
-  .all-questions-left {
+  .all-blogs-left {
     display: flex;
     margin-right: 30px;
   }
@@ -41,25 +41,25 @@
     margin-bottom: 2px;
   }
   
-  .question-answer {
+  .blog-answer {
     display: flex;
     flex-direction: column;
     width: 100%;
     text-align : left;
   }
   
-  .question-answer > a {
+  .blog-answer > a {
     color: #0151f0d8;
     font-size: 1.1rem;
     margin-bottom: 10px;
   }
-  .question-answer > a:hover {
+  .blog-answer > a:hover {
     color: #1649b1d8;
     font-size: 1.1rem;
     margin-bottom: 10px;
   }
   
-  .question-answer > p {
+  .blog-answer > p {
     font-size: 0.9rem;
     color: rgba(0, 0, 0, 0.7);
     margin-bottom: 10px;
@@ -126,7 +126,7 @@
     color: #0151f0a2;
   }
 
-  .question-tag{
+  .blog-tag{
     margin : 10px 5px;
     padding : 5px 10px;
     background-color: #007cd446;

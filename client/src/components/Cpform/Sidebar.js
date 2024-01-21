@@ -9,7 +9,7 @@ function Sidebar() {
             <div className='sidebar-container'>
                 <div className='sidebar-options'>
                     <div className='sidebar-option'>
-                        <Link>Home</Link>
+                        <Link to='/'>Home</Link>
 
                     </div>
                     <div className='sidebar-option'>
@@ -17,7 +17,7 @@ function Sidebar() {
                     </div>
 
                     <div className='sidebar-option'>
-                        <Link to='/blog'>Blog</Link>
+                        <Link to='/blogs'>Blog</Link>
                     </div>
 
                     <div className='sidebar-option'>
@@ -28,23 +28,6 @@ function Sidebar() {
                         </div>
                     </div>
 
-                    {/* <div className='sidebar-option'>
-                        <p>Find a Job</p>
-                        <div className='link'>
-                            <div className='link-tag'>
-                                <Link>Question</Link>              </div>
-                        </div>
-
-                    </div> */}
-{/* 
-                     <div className='sidebar-option'>
-                        <p>Teams</p>
-                        <div className='link-tag'>
-                           
-                            <Link>Companies</Link>              
-                            </div>
-                    </div> 
-                     */}
 
                 </div>
             </div>

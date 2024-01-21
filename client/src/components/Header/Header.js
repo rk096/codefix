@@ -2,19 +2,22 @@ import React , {useContext}from 'react'
 import './css/Header.css'
 import SearchIcon from '@mui/icons-material/Search';
 import InboxIcon from '@mui/icons-material/Inbox';
-// import { Avatar } from '@mui/material';
+import { Avatar } from '@mui/material';
 import {Link, useNavigate} from 'react-router-dom';
-import Avatar from '../Avatar/Avatar';
+import avatar from '../Avatar/Avatar';
 import { AuthContext } from '../../App';
 import {
   signOut
 } from "firebase/auth";
 import { auth } from '../../firebase.js'; 
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/userSlice.js';
 
 function Header() {
 
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
@@ -46,9 +49,8 @@ function Header() {
         <div className='header-right-container'>
         {user ? (
               <>
-                <Avatar backgroundColor='#009dff' px="10px" py="15px" borderRadius="50%" color="white">
-                  <Link to='/user' style={{ color: 'white', textDecoration: 'none' }}>y</Link>
-                </Avatar>
+              <Avatar src={user?.photo} style={{marginRight:"10px"}} />
+                
                 <Link onClick={handleLogout} className='nav-item nav-links'>Log out</Link>
               </>
             ) : (

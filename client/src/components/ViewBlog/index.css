@@ -46,19 +46,19 @@
 
 
 
-.all-questions {
+.all-blogs {
   display: flex;
   text-align: left;
 }
 
-.all-questions-container {
+.all-blogs-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
 }
 
-.all-questions-left {
+.all-blogs-left {
   display: flex;
   margin-right: 30px;
 }
@@ -71,7 +71,7 @@
   font-size: small;
 }
 
-.question-answer {
+.blog-answer {
   display: flex;
   flex-direction: column;
   width: 100%;

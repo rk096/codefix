@@ -7,6 +7,9 @@ import {
 import React, { useState } from "react";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { createUser, loginUser } from '../../utils/ServerHelpers';
+// import { useCookies } from 'react-cookie';
+
 
 const Auth = () => {
 
@@ -17,34 +20,54 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
+  //const [cookies, setCookie = useCookies(["token"])];
 
   const handleSwitch = () => {
     setIsSignup(!isSignup)
   }
 
-  
+
   const handleSignInGoogle = () => {
-    signInWithPopup(auth, provider).then((res)=>{
-      console.log(res);
+    signInWithPopup(auth, provider).then((res) => {
+      //console.log(res);
+      console.log("logged in successfully");
     })
   }
-  
+
   const handleRegister = (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    if(email === "" || password === "" || username === ""){
+    if (email === "" || password === "" || username === "") {
       setError("Required field is missing");
       setLoading(false);
     }
     else {
-     
+
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
-          setLoading(false);
+
+          const additionalInfo = {
+            email: user.email,
+            password: password,
+            username: username,
+          };
+
+          // Create user in backend
+          createUser(additionalInfo)
+            .then((data) => {
+              console.log('User created successfully:', data.message);
+              
+              // setCookie("token", data.token, {path:"/", maxAge:60})
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error('Error creating user in backend:', error.message);
+              setError(error.message);
+              setLoading(false);
+            });
         })
         .catch((error) => {
           console.error('Error creating user:', error.code, error.message);
@@ -58,14 +81,33 @@ const Auth = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    if(email === "" || password === ""){
+    if (email === "" || password === "") {
       setError("Required field is missing.");
       setLoading(false);
-    }else{
-      signInWithEmailAndPassword(auth, email, password).then((res) => {
-        console.log(res);
-        setLoading(false);
-        navigate('/');
+    } else {
+      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+       
+        const user = userCredential.user;
+
+        const additionalInfo = {
+          email: user.email,
+          password: password,
+        };
+
+        // log user in backend
+        loginUser(additionalInfo)
+          .then((data) => {
+            console.log('User loggedin successfully:', data.message);
+            setLoading(false);
+            navigate('/');
+
+          })
+          .catch((error) => {
+            console.error('Error login user in backend:', error.message);
+            setError(error.message);
+            setLoading(false);
+          });
+        
       }).catch((error) => {
         console.log(error.code);
         setError(error.message);
@@ -73,16 +115,16 @@ const Auth = () => {
       })
     }
   }
-  
+
 
   return (
     <section className='auth-section'>
 
 
-<div className='auth-options'>
+      <div className='auth-options'>
 
-<div className="sign-options">
-          <div onClick = { handleSignInGoogle}className="single-option">
+        <div className="sign-options">
+          <div onClick={handleSignInGoogle} className="single-option">
             <img
               alt="google"
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7TjCijCsE8Ix1uSi3q8Kk4T_x1tYvALEqlA&usqp=CAU"
@@ -98,7 +140,7 @@ const Auth = () => {
           </div>
         </div>
 
-</div>
+      </div>
 
 
 
@@ -109,7 +151,7 @@ const Auth = () => {
             isSignup && (
               <label htmlFor='name'>
                 <h4>Username</h4>
-                <input  value={username} onChange={(e) => setUsername(e.target.value)} type="text" name="name" id="name" />
+                <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" name="name" id="name" />
               </label>
             )
           }
@@ -125,10 +167,10 @@ const Auth = () => {
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name='password' id='password' />
             {isSignup && <p>Password must contain at least eight <br />characters, including at least 1 leter and 1 <br />number</p>}
           </label>
-          
+
 
           <button onClick={isSignup ? handleRegister : handleSignIn} type='submit' className='auth-btn' disabled={loading}>
-          {loading ?  (isSignup ? 'Signing....' : 'Loging...') : (isSignup ? 'Sign up' : 'Log in')}
+            {loading ? (isSignup ? 'Signing....' : 'Loging...') : (isSignup ? 'Sign up' : 'Log in')}
           </button>
         </form>
         <p>
@@ -139,8 +181,8 @@ const Auth = () => {
       </div>
       {
         error !== "" && (<p style={{
-          color:"red",
-          fontSize:"14px"
+          color: "red",
+          fontSize: "14px"
         }}>
           {error}
         </p>)
