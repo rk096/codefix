@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { createUser, loginUser } from '../../utils/ServerHelpers';
-// import { useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 
 const Auth = () => {
@@ -22,6 +22,8 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   //const [cookies, setCookie = useCookies(["token"])];
+  const [cookies, setCookie, /* removeCookie */] = useCookies(["token"]);
+
 
   const handleSwitch = () => {
     setIsSignup(!isSignup)
@@ -31,7 +33,18 @@ const Auth = () => {
   const handleSignInGoogle = () => {
     signInWithPopup(auth, provider).then((res) => {
       //console.log(res);
-      console.log("logged in successfully");
+      const user = res.user;
+      console.log("token", user);
+          const additionalInfo = {
+            email: user.email,
+            password: password,
+          };
+
+          // loginUser(additionalInfo)
+          // .then((data) => {
+          //   console.log('User loggedin successfully:', data.message);
+          //   setCookie("token", data.token, {path:"/", maxAge:60});
+          // })
     })
   }
 
@@ -60,7 +73,6 @@ const Auth = () => {
             .then((data) => {
               console.log('User created successfully:', data.message);
               
-              // setCookie("token", data.token, {path:"/", maxAge:60})
               setLoading(false);
             })
             .catch((error) => {
@@ -99,6 +111,7 @@ const Auth = () => {
           .then((data) => {
             console.log('User loggedin successfully:', data.message);
             setLoading(false);
+            setCookie("token", data.token, {path:"/", maxAge:60});
             navigate('/');
 
           })

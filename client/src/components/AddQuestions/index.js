@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
+import { addquestion } from '../../utils/QuestionHelper';
 
-function index() {
+const Index = () => {
+
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+    const [tags, setTags] = useState([]);
+
+    const handleAddQuestion = () => {
+
+        // console.log("title", title);
+        // console.log("body", body);
+        // console.log("tags", tags);
+
+        const question = {title, body, tags};
+        addquestion(question);
+    }
+
     return (
         <div className='add-question'>
             <div className='add-question-container'>
@@ -19,7 +35,7 @@ function index() {
                             <div className='title'>
                                 <h3>Title</h3>
                                 <small>Be specific and imaging you're asking a question to another person.</small>
-                                <input type='text' placeholder='Add question title' />
+                                <input type='text' placeholder='Add question title' value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
                         </div>
                         <div className='question-option'>
@@ -28,7 +44,7 @@ function index() {
                                 <h3>Body</h3>
                                 <small>Include all the information someone would need to answer your
                                     question</small>
-                                <ReactQuill className='react-quill' theme='snow' />
+                                <ReactQuill className='react-quill' theme='snow' value={body} onChange={(e) => setBody(e)} />
                             </div>
 
                         </div>
@@ -37,7 +53,7 @@ function index() {
                             <div className='title'>
                                 <h3>Tags</h3>
                                 <small>Add up to 5 tags to describe what your question is about.</small>
-                                <TagInput />
+                                <TagInput setTags={setTags} tags={tags} />
                                 {/* <TagsInput name='tags' placeHolder='press enter to add new tag' /> */}
                             </div>
                         </div>
@@ -45,12 +61,12 @@ function index() {
 
                     </div>
                 </div>
-                <button className='button'>Add your question</button>
+                <button className='button' onClick={handleAddQuestion}>Add your question</button>
             </div>
         </div>
     )
 }
 
 
-export default index
+export default Index
 
