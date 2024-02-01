@@ -1,12 +1,17 @@
 const mongoose = require('mongoose')
 const commentSchema = new mongoose.Schema({
-    body: String,
+    body: {
+        type: String,
+        required: true
+    },
     created_at: {
         type: Date,
         default: Date.now(),
     },
     user: {
-        type: Object
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     question: {
         type: mongoose.Schema.Types.ObjectId,
