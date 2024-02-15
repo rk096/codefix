@@ -3,13 +3,18 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import { addquestion } from '../../utils/QuestionHelper';
+import {addquestion} from '../../utils/QuestionHelper';
+import { useNavigate } from "react-router-dom";
+
+
 
 const Index = () => {
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [tags, setTags] = useState([]);
+    const navigate = useNavigate();
+
 
     const handleAddQuestion = () => {
 
@@ -19,6 +24,8 @@ const Index = () => {
 
         const question = {title, body, tags};
         addquestion(question);
+        navigate("/");
+
     }
 
     return (

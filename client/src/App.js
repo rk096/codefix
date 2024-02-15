@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Cpform from './components/Cpform';
+import Cpform from './components/Cpform/Index';
 import ViewQuestion from './components/ViewQuestion';
 import AddQuestions from './components/AddQuestions';
 import AddBlog from './components/AddBlog';
@@ -79,7 +79,7 @@ function App() {
               }
             />
             <Route
-              path="/question"
+              path="/question/:id"
               element={
                 user ? <ViewQuestion /> : <Navigate to="/auth" />
               }

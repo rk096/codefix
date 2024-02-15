@@ -8,7 +8,7 @@ import History from "@material-ui/icons/History";
 import { Link } from "react-router-dom";
 import { useState } from 'react';
 
-function MainQuestion() {
+function MainBlog() {
 
     const [show, setshow] = useState(false);
 
@@ -142,4 +142,4 @@ function MainQuestion() {
     )
 }
 
-export default MainQuestion
+export default MainBlog

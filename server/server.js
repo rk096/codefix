@@ -3,6 +3,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require("path");
+const JwtStrategy = require("passport-jwt").Strategy,
+    ExtractJwt = require("passport-jwt").ExtractJwt;
+const passport = require("passport");
+const Users = require('./models/User.js');
+
+
 
 const db = require("./DatabaseConnection.js");
 const authRouter = require("./routes/AuthRoutes.js");
@@ -30,6 +36,26 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "*")
     next()
 })
+
+let opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = "thisKeyIsSupposedToBeSecret";
+passport.use(
+    new JwtStrategy(opts, async function (jwt_payload, done) {
+        try {
+            const user = await Users.findOne({ _id: jwt_payload.identifier });
+            if (user) {
+                return done(null, user);
+            } else {
+                return done(null, false);
+                // or you could create a new account
+            }
+        } catch (err) {
+            return done(err, false);
+        }
+    })
+);
+
 
 
 // API

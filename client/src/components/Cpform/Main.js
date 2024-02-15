@@ -6,11 +6,13 @@ import './css/main.css';
 import { AuthContext } from '../../App';
 import AllBlogs from './AllBlog';
 
-function Main() {
+function Main({question, blog}) {
 
+ // console.log("main",blog);
   const user = useContext(AuthContext);
   const location = useLocation();
   const isBlogRoute = location.pathname === "/blogs";
+
 
   return (
     <div className="main">
@@ -73,12 +75,45 @@ function Main() {
             </div>
           </div>
         </div>
-        <div className="questions">
+        {/* <div className="questions">
           <div className="question">
-            {isBlogRoute ? <AllBlogs /> : <AllQuestions />}
+            {isBlogRoute ? <AllBlogs /> : <AllQuestions  data={question}/>}
           </div>
 
-        </div>
+        </div> */}
+
+        {isBlogRoute ? (
+          
+          blog.length > 0 && (
+            <div className="questions">
+
+            {blog.map((blog,index) => (
+              <div className='question' key={index}>
+              <AllBlogs data={blog} />
+            </div>
+            ))}
+           
+            </div>
+          )
+        
+        )
+        :(
+          question.length > 0 && (
+          <div className="questions">
+          
+            {question.map((question, index) => (
+              <div className="question" key={index}>
+                
+                <AllQuestions data={question} />
+              </div>
+            ))}
+          </div>
+        )
+        )
+        
+        }
+        
+       
       </div>
     </div>
 
