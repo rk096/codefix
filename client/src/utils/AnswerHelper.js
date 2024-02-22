@@ -3,7 +3,7 @@ import { getToken } from "./Config";
 
 export const addanswer = async (answer) => {
     try {
-        console.log(answer);
+        //console.log(answer);
         const token = getToken();
         //console.log(token);
        const response = await fetch(`${backendUrl}/codehub/answer/create`, {
@@ -26,7 +26,7 @@ export const addanswer = async (answer) => {
 
 export const fetchAllAnswers = async (id) => {
     try {
-        const response = await fetch(`${backendUrl}/codehub/answer?questionId=${id}`, {
+        const response = await fetch(`${backendUrl}/codehub/answer/xyz/${id}`, {
             method: "GET",
             headers: { 
                 "Content-Type": "application/json"

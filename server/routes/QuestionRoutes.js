@@ -56,7 +56,34 @@ router.get(
     }
 );
 
+router.post("/:id/upvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
 
+    try {
+        const question = await QuestionModel.findById(id);
+
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+
+        if (question.vote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question' });
+        }
+
+       
+        question.vote.push(user);
+
+        await question.save();
+       // console.log("question updated : ", question);
+
+        res.json({  msg: 'Question upvoted successfully', question: question });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 
 // router.route("/").get(getAllQuestions).post(createQuestion);

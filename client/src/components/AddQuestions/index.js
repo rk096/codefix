@@ -14,17 +14,25 @@ const Index = () => {
     const [body, setBody] = useState('');
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
-
+    
 
     const handleAddQuestion = () => {
 
         // console.log("title", title);
         // console.log("body", body);
         // console.log("tags", tags);
+        if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
+            const question = {title, body, tags};
+            addquestion(question);
+            navigate("/");
+        } else {
+            console.error('Insufficient details to add question.');
+           alert("please fill all fields")
+        }
 
-        const question = {title, body, tags};
-        addquestion(question);
-        navigate("/");
+        // const question = {title, body, tags};
+        // addquestion(question);
+        // navigate("/");
 
     }
 
@@ -70,6 +78,7 @@ const Index = () => {
                 </div>
                 <button className='button' onClick={handleAddQuestion}>Add your question</button>
             </div>
+           
         </div>
     )
 }

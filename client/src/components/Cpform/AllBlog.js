@@ -44,7 +44,7 @@ function AllBlogs({data}) {
                     </div>
                 </div>
                 <div className='blog-answer'>
-                    <Link to='/blog'>{data.title}</Link>
+                    <Link to={`/blog/${data._id}`}>{data.title}</Link>
                     <div style={{
                         width: "90%"
                     }}>

@@ -1,6 +1,8 @@
 const express = require("express");
 const passport = require("passport"); 
 const AnswerModel = require("../models/Answer");
+const UserModel = require("../models/User");
+
 
 // const {
 //     getAllAnswers,
@@ -37,6 +39,34 @@ router.get(
         return res.status(200).json(data);
     }
 );
+
+router.get(
+    "/xyz/:id",
+    async(req,res) => {
+    try{
+        const {id} = req.params;
+    const answers =  await AnswerModel.find({ question: id });
+    
+        console.log(answers);
+        let answerdetails=[];
+        for(let element of answers){
+            let e1 = element.toObject();
+            const id = element.user;
+            const user = await UserModel.findById(id);
+            e1.name = user.username;
+            answerdetails.push(e1);
+        }
+
+        res.json({ answers:answerdetails });
+    }
+    catch(error){
+        console.error("Error fetching answers:", error);
+        res.status(500).json({ error: "Error fetching answers" });
+    };
+});
+    
+
+
 
 router.get(
     "/",

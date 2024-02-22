@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+// const dotenv = require('dotenv').config();
 
-const url = <MONGO_DB_CONNECT>
+const url = "mongodb+srv://richakamani32:23112003@codehub.j7wwepp.mongodb.net/?retryWrites=true&w=majority"
 
 module.exports.connect = () => {
     mongoose.connect(url)

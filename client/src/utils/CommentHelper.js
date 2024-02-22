@@ -1,30 +1,32 @@
 import {backendUrl} from "./Config";
 import { getToken } from "./Config";
 
-export const addblog = async (blog) => {
+export const addComment = async (comment) => {
     try {
-        console.log(blog);
+        //console.log(comment);
         const token = getToken();
-        console.log(token);
-       const response = await fetch(`${backendUrl}/codehub/blog/create`, {
+        //console.log(token);
+       const response = await fetch(`${backendUrl}/codehub/comment/create`, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(blog),
+            body: JSON.stringify(comment),
         });
         const formattedResponse = await response.json();
+        //console.log("comment", formattedResponse);
         return formattedResponse;
         
     } catch (error) {
-        throw new Error(`Error creating blog: ${error.message}`);
+        throw new Error(`Error creating comment: ${error.message}`);
     }
 };
 
-export const getAllBlogs = async () => {
+
+export const AllcommentsByQuestion = async (id) => {
     try {
-        const response = await fetch(`${backendUrl}/codehub/blog`, {
+        const response = await fetch(`${backendUrl}/codehub/comment/que/${id}`, {
             method: "GET",
             headers: { 
                 "Content-Type": "application/json"
@@ -39,14 +41,15 @@ export const getAllBlogs = async () => {
         //console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
-        console.error("Error fetching blog:", error);
-        throw new Error(`Error fetching blog: ${error.message}`);
+        console.error("Error fetching comment:", error);
+        throw new Error(`Error fetching comment: ${error.message}`);
     }
 }
 
-export const getBlogById = async (id) => {
+
+export const AllcommentsByBlog = async (id) => {
     try {
-        const response = await fetch(`${backendUrl}/codehub/blog/${id}`, {
+        const response = await fetch(`${backendUrl}/codehub/comment/blg/${id}`, {
             method: "GET",
             headers: { 
                 "Content-Type": "application/json"
@@ -58,10 +61,10 @@ export const getBlogById = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       //console.log("Response from backend:", formattedResponse);
+        //console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
-        console.error("Error fetching blog:", error);
-        throw new Error(`Error fetching blog: ${error.message}`);
+        console.error("Error fetching comment:", error);
+        throw new Error(`Error fetching comment: ${error.message}`);
     }
 }

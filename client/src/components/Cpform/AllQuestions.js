@@ -5,6 +5,7 @@ import './css/allquestion.css';
 import ReactHtmlParser from "react-html-parser";
 import { stringAvatar } from '../../utils/Avatar';
 import { getuname } from '../../utils/UserHelper';
+import { fetchAllAnswers } from '../../utils/AnswerHelper';
 
 function AllQuestions({ data }) {
 
@@ -12,12 +13,16 @@ function AllQuestions({ data }) {
     //console.log("question",data);
     //console.log("user", data.user);
     const [user, setUser] = useState('');
+    const [allanswer, setAllanswer] = useState([]);
 
     useEffect(() => {
         const fetchusername = async () => {
             try {
                 const user = await getuname(data.user);
+                const answers = await fetchAllAnswers(data._id);
+               // console.log(answers);
                 setUser(user.username);
+                setAllanswer(answers);
             } catch (error) {
                 console.error('Error fetching username:', error.message);
             }
@@ -41,13 +46,11 @@ function AllQuestions({ data }) {
                         </div>
 
                         <div className='all-option'>
-                            <p>0</p>
+                        <p>{allanswer.length}</p>
                             <span>Answers</span>
                         </div>
 
-                        <div className='all-option'>
-                            <small>0 Views</small>
-                        </div>
+                       
                     </div>
                 </div>
                 <div className='question-answer'>

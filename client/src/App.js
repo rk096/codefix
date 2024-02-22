@@ -91,7 +91,7 @@ function App() {
               }
             />
             <Route
-              path="/blog"
+              path="/blog/:id"
               element={
                 user ? <ViewBlog /> : <Navigate to="/auth" />
               }
