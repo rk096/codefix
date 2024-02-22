@@ -19,11 +19,18 @@ function Index() {
         // console.log("title", title);
         // console.log("body", body);
         // console.log("tags", tags);
-
-        const blog = {title, body, tags};
+        if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
+            const blog = {title, body, tags};
         console.log(blog);
        addblog(blog);
         navigate("/blogs");
+        } else {
+            console.error('Insufficient details to add question.');
+           alert("please fill all fields")
+        }
+
+
+        
     }
     return (
         <div className='add-blog'>

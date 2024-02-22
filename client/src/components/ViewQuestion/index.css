@@ -24,6 +24,7 @@
     color: rgba(0, 0, 0, 0.25);
     margin-bottom: 0px;
     margin-top: 0px;
+    cursor: pointer;
   }
   
   .all-options > .MuiSvgIcon-root {

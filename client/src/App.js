@@ -87,11 +87,11 @@ function App() {
              <Route
               path="/users"
               element={
-                user ? <Users /> : <Navigate to="/auth" />
+                <Users />
               }
             />
             <Route
-              path="/blog"
+              path="/blog/:id"
               element={
                 user ? <ViewBlog /> : <Navigate to="/auth" />
               }

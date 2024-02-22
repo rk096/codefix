@@ -44,7 +44,7 @@ function AllBlogs({data}) {
                     </div>
                 </div>
                 <div className='blog-answer'>
-                    <Link to='/blog'>{data.title}</Link>
+                    <Link to={`/blog/${data._id}`}>{data.title}</Link>
                     <div style={{
                         width: "90%"
                     }}>
@@ -64,7 +64,7 @@ function AllBlogs({data}) {
                     <div className='author'>
                         <small>{data.created_at.split("T")[0]}</small>
                         <div className='author-deatails'>
-                        <Avatar>{user.charAt(0)}</Avatar>
+                        <Avatar>{user?.charAt(0)}</Avatar>
                             <p>{user}</p>
                         </div>
 

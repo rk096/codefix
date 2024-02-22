@@ -21,7 +21,7 @@ const Users = () => {
 
   return (
     <div className="users-container">
-      {users.map((user) => (
+      {/* {users.map((user) => (
         <div className="user-card" key={user._id}>
           <Link to={`/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={user.profilepic} alt="Profile" className="profile-pic" />
@@ -31,7 +31,78 @@ const Users = () => {
             </div>
           </Link>
         </div>
-      ))}
+      ))} */}
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
+
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
+
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
+
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
+
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
+
+      <div className="user-card">
+        <img  alt="Profile" className="profile-pic"/>
+          <div className="user-details">
+            <h2>
+            asdfkkkgk
+            </h2>
+            <p>
+            dfsfajslfjlasjfjsalfjljjlfjaljldfjlkajkfjljf
+            </p>
+          </div>
+      </div>
     </div>
   );
 }

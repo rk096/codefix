@@ -14,17 +14,28 @@ const router = express.Router();
 router.get(
     "/:id",
     async (req, res) => {
+        try {
         const {id} = req.params;
         const data = await  UserModel.findById(id);
         return res.status(200).json(data);
+        }catch(error){
+            console.error("Error fetching user by id");
+            res.status(500).json({ error: "Error fetching user" });
+        
+        }
     }
 );
 
 router.get(
     "/",
     async (req, res) => {
-        const data = await  UserModel.findAll();
+        try {
+        const data = await  UserModel.find();
         return res.status(200).json(data);
+        }catch(error){
+            console.error("Error fetching user");
+            res.status(500).json({ error: "Error fetching user" });
+        }
     }
 );
 

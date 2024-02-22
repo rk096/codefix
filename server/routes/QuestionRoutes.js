@@ -18,6 +18,7 @@ router.post(
     "/create",
     passport.authenticate("jwt", { session: false }),
     async (req, res) => {
+        try {
         const { title, body, tags } = req.body;
         if (!title || !body || !tags) {
             return res
@@ -28,15 +29,24 @@ router.post(
         const questiondetails = { title, body, tags, user };
         const createquestion = await QuestionModel.create(questiondetails);
         return res.status(200).json(createquestion);
+    }catch(error){
+        console.error("Error creating question");
+        return res.status(500).json({ error: "Error creating question" });
     }
+}
 );
 
 
 router.get(
     "/",
     async (req, res) => {
+        try {
         const data = await  QuestionModel.find();
         return res.status(200).json(data);
+        }catch(error){
+            console.error("Error fetching question");
+            res.status(500).json({ error: "Error fetching question" });
+        }
     }
 );
 
@@ -48,13 +58,40 @@ router.get(
             const data = await QuestionModel.findById(id); 
             return res.status(200).json(data);
         } catch (error) {
-            console.error("Error fetching question:", error);
+            console.error("Error fetching question");
             return res.status(500).json({ error: "Error fetching question" });
         }
     }
 );
 
+router.post("/:id/upvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
 
+    try {
+        const question = await QuestionModel.findById(id);
+
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+
+        if (question.vote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question' });
+        }
+
+       
+        question.vote.push(user);
+
+        await question.save();
+       // console.log("question updated : ", question);
+
+        res.json({  msg: 'Question upvoted successfully', question: question });
+    } catch (err) {
+        console.error("error in question upvote");
+        res.status(500).send('Server Error');
+    }
+});
 
 
 // router.route("/").get(getAllQuestions).post(createQuestion);
