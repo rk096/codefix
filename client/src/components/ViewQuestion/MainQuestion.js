@@ -74,7 +74,7 @@ function MainQuestion({ id }) {
         <div className='main'>
             <div className='main-container'>
                 <div className='main-top'>
-                    <h2 className='main-question'> questio title</h2>
+                    <h2 className='main-question'> Question Title</h2>
                     <Link to='/add-question'>
                         <button>Ask Question</button>
                     </Link>
