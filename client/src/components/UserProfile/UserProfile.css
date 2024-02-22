@@ -1,0 +1,65 @@
+/* UserProfile.css */
+
+.user-profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.user-profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-profile-header h1 {
+    font-size: 24px;
+}
+
+.user-profile-header h2 {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.user-section {
+    margin-top: 30px;
+}
+
+.user-section h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.user-section .card {
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.user-section .card a {
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user-section .card a:hover {
+    text-decoration: underline;
+}
+
+.card-content {
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    margin: 0;
+}
+
+.card-content small {
+    color: #586069;
+}
+
+.card-content .vote {
+    margin-right: 10px;
+}

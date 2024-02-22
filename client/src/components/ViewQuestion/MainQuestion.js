@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
@@ -7,10 +7,68 @@ import Bookmark from "@material-ui/icons/Bookmark";
 import History from "@material-ui/icons/History";
 import { Link } from "react-router-dom";
 import { useState } from 'react';
+import { addanswer } from '../../utils/AnswerHelper';
+import { fetchAllAnswers } from '../../utils/AnswerHelper';
+import ReactHtmlParser from "react-html-parser";
+import { getQuestionById } from '../../utils/QuestionHelper';
+import { getuname } from '../../utils/UserHelper';
 
-function MainQuestion() {
+function MainQuestion({ id }) {
 
     const [show, setshow] = useState(false);
+    const [answer, setAnswer] = useState('');
+    const [allanswer, setAllanswer] = useState([]);
+    const [ques, setQuestion] = useState('');
+    const [ansuname, setAnsUname] = useState('');
+
+    // console.log("ques", ques);
+
+    const handlePostAnswer = () => {
+
+        const ans = { body: answer, question: id }
+        const data = addanswer(ans);
+        setAllanswer([...allanswer, data]);
+        setAnswer('');
+
+        // console.log(data);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const answers = await fetchAllAnswers(id);
+                const question = await getQuestionById(id);
+
+                //console.log('Fetched answers:', answers);
+                //console.log('Fetched question:', question);
+
+                setAllanswer(answers);
+                setQuestion(question);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [id]);
+
+    const findUsernameById = async (userId) => {
+        try {
+            const user = await getuname(userId);
+            console.log("user", user);
+            if (user && user.username) {
+               setAnsUname(user.username);
+            } else {
+                console.error("User or username not found.");
+            }
+        } catch (error) {
+            console.error("Error retrieving username:", error);
+        }
+    };
+    
+    function truncate(str, n) {
+        return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+    }
 
     return (
         <div className='main'>
@@ -42,7 +100,8 @@ function MainQuestion() {
                             </div>
                         </div>
                         <div className='question-answer'>
-                            <p>This is test answer body</p>
+                            {ReactHtmlParser(truncate(ques.body, 200))}
+
                             <div className='author'>
                                 <small>asked "timestamp"</small>
                                 <div className='auth-details'>
@@ -72,7 +131,7 @@ function MainQuestion() {
                                                 border: "1px solid rgba(0,0,0,0.2)",
                                                 borderRadius: "3px",
                                                 outline: "none",
-                                                width : "100%"
+                                                width: "100%"
                                             }}>
 
                                         </textarea>
@@ -95,46 +154,54 @@ function MainQuestion() {
                         fontSize: "1.3rem",
                         fontWeight: "300",
                     }}>No of answers</p>
-                    <div className='all-questions-container'>
-                        <div className='all-questions-left'>
-                            <div className='all-options'>
-                                <p className='arrow'>▲</p>
-                                <p className='arrow'>0</p>
-                                <p className='arrow'>▼</p>
 
-                                <Bookmark />
-                                <History />
+                    {allanswer.map((answer, index) => (
 
+                        <div className='all-questions-container'>
+                            <div className='all-questions-left'>
+                                <div className='all-options'>
+
+                                    <React.Fragment key={index}>
+                                        <p className='arrow'>▲</p>
+                                        <p className='arrow'>0</p>
+                                        <p className='arrow'>▼</p>
+                                    </React.Fragment>
+
+                                    <Bookmark />
+                                    <History />
+                                </div>
                             </div>
-                        </div>
+                           
+                            <div key={index} className='question-answer'>
+                               
+                                {ReactHtmlParser(truncate(answer.body, 200))}
 
-
-                        <div className='question-answer'>
-                            <p>This is test answer body</p>
-                            <div className='author'>
-                                <small>asked "timestamp"</small>
-                                <div className='auth-details'>
-                                    <Avatar />
-                                    <p>name</p>
+                                <div className='author'>
+                                    <small>{answer.created_at.split("T")[0]}</small>
+                                    <div className='auth-details'>
+                                        <Avatar />
+                                        <p>{answer.user}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                        </div>
 
-                    </div>
+                        </div>
+                    ))}
                 </div>
+                    
                 <div className='main-answer'>
                     <h3 style={{
                         fontSize: "22px",
                         margin: "10px 0",
                         fontWeight: "400"
                     }}>Your answer</h3>
-                    <ReactQuill className='react-quill' theme='snow' style={{ height: "200px" }} />
+                    <ReactQuill className='react-quill' theme='snow' style={{ height: "200px" }} value={answer} onChange={(e) => { setAnswer(e) }} />
                 </div>
                 <button style={{
                     maxWidth: "fit-content",
                     marginTop: "80px"
-                }}>Post Your Answer</button>
+                }} onClick={handlePostAnswer}>Post Your Answer</button>
 
             </div>
 

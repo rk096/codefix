@@ -1,9 +1,35 @@
 import { Avatar } from '@mui/material';
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './css/allquestion.css';
+import ReactHtmlParser from "react-html-parser";
+import { stringAvatar } from '../../utils/Avatar';
+import { getuname } from '../../utils/UserHelper';
 
-function AllQuestions() {
+function AllQuestions({ data }) {
+
+
+    //console.log("question",data);
+    //console.log("user", data.user);
+    const [user, setUser] = useState('');
+
+    useEffect(() => {
+        const fetchusername = async () => {
+            try {
+                const user = await getuname(data.user);
+                setUser(user.username);
+            } catch (error) {
+                console.error('Error fetching username:', error.message);
+            }
+        };
+        fetchusername();
+    }, [data.user]);
+
+
+    function truncate(str, n) {
+        return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+    }
+
     return (
         <div className='all-questions'>
             <div className='all-questions-container'>
@@ -25,26 +51,34 @@ function AllQuestions() {
                     </div>
                 </div>
                 <div className='question-answer'>
-                    <Link to='/question'>title</Link>
+                <Link to={`/question/${data._id}`}>{data.title}</Link>
                     <div style={{
                         width: "90%"
                     }}>
-                        <div>answer</div>
+                        <div>{ReactHtmlParser(truncate(data.body, 200))}</div>
 
                     </div>
                     <div style={{
                         display: "flex"
                     }}>
-                        <span className='question-tag'>react</span>
-                        <span className='question-tag'>antc</span>
-                        <span className='question-tag'>frontend</span>
+
+                        {data.tags.map((tag) =>
+                            <span className='question-tag'>{tag}</span>
+                        )
+                        }
 
                     </div>
                     <div className='author'>
-                        <small>time stamp</small>
+
+                        <small>{data.created_at.split("T")[0]}</small>
                         <div className='author-deatails'>
-                            <Avatar />
-                            <p>username</p>
+                          
+
+                            <Avatar>{user.charAt(0)}</Avatar>
+
+                            <p>
+                                {user}
+                            </p>
                         </div>
 
                     </div>

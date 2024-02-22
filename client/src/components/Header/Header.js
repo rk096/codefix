@@ -6,9 +6,7 @@ import { Avatar } from '@mui/material';
 import {Link, useNavigate} from 'react-router-dom';
 import avatar from '../Avatar/Avatar';
 import { AuthContext } from '../../App';
-import {
-  signOut
-} from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { auth } from '../../firebase.js'; 
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice.js';

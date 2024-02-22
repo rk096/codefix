@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './TagInput.css'; // Import the CSS file
 
-const TagInput = () => {
-  const [tags, setTags] = useState([]);
+const TagInput = ({setTags, tags}) => {
+ 
   const maxTags = 5;
 
   const handleKeyDown = (e) => {

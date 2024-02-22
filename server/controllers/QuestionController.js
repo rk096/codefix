@@ -1,7 +1,14 @@
 const questionService = require("../services/QuestionService");
+const passport = require("passport");
+
 
 exports.getAllQuestions = async(req, res) => {
     try {
+
+        if (!req.user) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
         const question = await questionService.getAllQuestions();
         res.json({ data: question, status: "success" });
     } catch (err) {
@@ -9,14 +16,20 @@ exports.getAllQuestions = async(req, res) => {
     }
 };
 
-exports.createQuestion = async(req, res) => {
-    try {
-        const question = await questionService.createQuestion(req.body);
-        res.json({ data: question, status: "success" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+// exports.createQuestion = async(req, res) => {
+//     try {
+//         const uid = req.user._id;
+//         const que = req.body;
+//         console.log(uid, que);
+//         const { title, body, tags } = req.body;
+//         const ques = {title,body, tags, uid}
+
+//         const question = await questionService.createQuestion(ques);
+//        res.json({ data: question, status: "success" });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
 
 exports.getQuestionById = async(req, res) => {
     try {

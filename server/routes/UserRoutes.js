@@ -1,16 +1,35 @@
 const express = require("express");
-
-const {
-    getAllUsers,
-    createUser,
-    getUserById,
-    updateUser,
-    deleteUser,
-} = require("../controllers/UserController");
+const passport = require("passport"); 
+const UserModel = require("../models/User");
+// const {
+//     getAllUsers,
+//     createUser,
+//     getUserById,
+//     updateUser,
+//     deleteUser,
+// } = require("../controllers/UserController");
 
 const router = express.Router();
 
-router.route("/").get(getAllUsers).post(createUser);
-router.route("/:id").get(getUserById).put(updateUser).delete(deleteUser);
+router.get(
+    "/:id",
+    async (req, res) => {
+        const {id} = req.params;
+        const data = await  UserModel.findById(id);
+        return res.status(200).json(data);
+    }
+);
+
+router.get(
+    "/",
+    async (req, res) => {
+        const data = await  UserModel.findAll();
+        return res.status(200).json(data);
+    }
+);
+
+// router.route("/").get(getAllUsers).post(createUser);
+// router.route("/:id").get(getUserById).put(updateUser).delete(deleteUser);
 
 module.exports = router;
+
