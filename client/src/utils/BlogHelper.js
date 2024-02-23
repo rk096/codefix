@@ -65,3 +65,80 @@ export const getBlogById = async (id) => {
         throw new Error(`Error fetching blog: ${error.message}`);
     }
 }
+
+
+export const upvoteBlog = async (id) => {
+    try {
+        const token = getToken();
+       // console.log(token);
+        const response = await fetch(`${backendUrl}/codehub/blog/${id}/upvote`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const formattedResponse = await response.json();
+       //console.log("Response from backend:", formattedResponse);
+        return formattedResponse;
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        throw new Error(`Error fetching blog: ${error.message}`);
+    }
+}
+
+export const getvoteBlog = async (id) => {
+    try {
+        const token = getToken();
+        //console.log(token);
+        const response = await fetch(`${backendUrl}/codehub/blog/${id}/getvote`, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const formattedResponse = await response.json();
+       console.log("Response from backend:", formattedResponse);
+        return formattedResponse;
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        throw new Error(`Error fetching blog: ${error.message}`);
+    }
+}
+
+
+export const downvoteBlog = async (id) => {
+    try {
+        const token = getToken();
+       // console.log(token);
+        const response = await fetch(`${backendUrl}/codehub/blog/${id}/downvote`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const formattedResponse = await response.json();
+       //console.log("Response from backend:", formattedResponse);
+        return formattedResponse;
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        throw new Error(`Error fetching blog: ${error.message}`);
+    }
+}

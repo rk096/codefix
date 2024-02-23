@@ -65,24 +65,6 @@ router.get(
     };
 });
     
-
-
-
-router.get(
-    "/",
-    async(req,res) => {
-        const {questioId} = req.query();
-        Answer.find({ questionId: questionId })
-    .then(answers => {
-        res.json({ answers });
-    })
-    .catch(error => {
-        console.error("Error fetching answers:", error);
-        res.status(500).json({ error: "Error fetching answers" });
-    });
-    }
-)
-
 // router.route("/").get(getAllAnswers).post(createAnswer);
 // router.route("/:id").get(getAnswerById).put(updateAnswer).delete(deleteAnswer);
 

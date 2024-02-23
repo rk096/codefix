@@ -14,15 +14,24 @@ function AllQuestions({ data }) {
     //console.log("user", data.user);
     const [user, setUser] = useState('');
     const [allanswer, setAllanswer] = useState([]);
+    const [like,setLike] = useState('0');
 
     useEffect(() => {
         const fetchusername = async () => {
             try {
                 const user = await getuname(data.user);
-                const answers = await fetchAllAnswers(data._id);
+                const answer = await fetchAllAnswers(data._id);
+                let len = data.upvote.length - data.downvote.length;
+                console.log("len :", len);
+                if(len >= 0){
+                    setLike(len);
+                }
+                else{
+                    setLike("-1");
+                }
                // console.log(answers);
                 setUser(user.username);
-                setAllanswer(answers);
+                setAllanswer(answer.answers);
             } catch (error) {
                 console.error('Error fetching username:', error.message);
             }
@@ -41,7 +50,7 @@ function AllQuestions({ data }) {
                 <div className='all-questions-left'>
                     <div className='all-options'>
                         <div className='all-option'>
-                            <p>0</p>
+                            <p>{like}</p>
                             <span>Votes</span>
                         </div>
 
