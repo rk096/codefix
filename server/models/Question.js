@@ -13,7 +13,11 @@ const questionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    vote: [{
+    upvote: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    downvote: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }],

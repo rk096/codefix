@@ -9,7 +9,11 @@ const blogSchema = new mongoose.Schema({
         required: true
     },
     tags: [],
-    vote: [{
+    upvote: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    downvote: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }],

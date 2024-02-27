@@ -75,8 +75,7 @@ router.get(
         res.status(500).json({ error: "Error fetching answers" });
     };
 });
-
-
+    
 // router.route("/").get(getAllAnswers).post(createAnswer);
 // router.route("/:id").get(getAnswerById).put(updateAnswer).delete(deleteAnswer);
 

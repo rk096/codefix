@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { addanswer } from '../../utils/AnswerHelper';
 import { fetchAllAnswers } from '../../utils/AnswerHelper';
 import ReactHtmlParser from "react-html-parser";
-import { getQuestionById, upvoteQuestion } from '../../utils/QuestionHelper';
+import { downvoteQuestion, getQuestionById, getvoteQuestion, upvoteQuestion } from '../../utils/QuestionHelper';
 import { getuname } from '../../utils/UserHelper';
 import { addComment, AllcommentsByQuestion } from '../../utils/CommentHelper';
 
@@ -25,14 +25,13 @@ function MainQuestion({ id }) {
     const [allcomments, setAllComments] = useState([]);
     const [upvoted, setUpvoted] = useState(false);
     const [downvoted, setDownvoted] = useState(false);
-    const [like, setLike] = useState('');
+    const [like, setLike] = useState('0');
 
     // console.log("ques", ques);
 
     const handlePostAnswer = async () => {
 
         if (!answer.trim()) {
-            // If the answer is empty, return or handle the error as needed
             alert("plese fill answer");
             return;
         }
@@ -46,16 +45,22 @@ function MainQuestion({ id }) {
 
     const handleUpvote = async () => {
        
-        try {
-            if(!upvoted){
+        try { 
+            const userexist = await getvoteQuestion(id);
+            //console.log(userexist);
+            if(userexist.exist != "user"){
             const response = await upvoteQuestion(id);
-            // console.log("Response:", response);
-            // console.log(response.question.vote.length);
-            setUpvoted(true);
-            setLike(response.question.vote.length);
+            let len = response.question.upvote.length - response.question.downvote.length;
+            if(len <= -1){
+                setLike("-1");
             }
             else{
-                alert("you already upovoted the question");
+                setLike(len);
+            }
+            }
+           
+            else{
+                alert("you already voted the question");
             }
         } catch (error) {
             console.error("Error upvoting question:", error);
@@ -67,21 +72,24 @@ function MainQuestion({ id }) {
     const handleDownvote = async () => {
        
         try {
-            if(!downvoted){
-            //const response = await upvoteQuestion(id);
-            // console.log("Response:", response);
-            // console.log(response.question.vote.length);
-            setDownvoted(true);
-            setLike(prevLike => {
-                if (prevLike > 0) {
-                    return prevLike - 1;
-                } else {
-                    return 0; 
+            console.log("clcik");
+            const userexist = await getvoteQuestion(id);
+            console.log("user",userexist);
+            if(userexist.exist != "user"){
+                const response = await downvoteQuestion(id);
+                console.log("downvote", response);
+                let len = response.question.upvote.length - response.question.downvote.length;
+                if(len <= -1){
+                    setLike("-1");
                 }
-            });
+                else{
+                    setLike(len);
+                }
+                //console.log("len: ", len);
             }
+            
             else{
-                alert("you already downvoted the question");
+                alert("you already voted the question");
             }
         } catch (error) {
             console.error("Error upvoting question:", error);
@@ -114,10 +122,12 @@ function MainQuestion({ id }) {
                 const answer = await fetchAllAnswers(id);
                 const question = await getQuestionById(id);
                 const com = await AllcommentsByQuestion(id);
-                const count = question.vote.length;
+                const count = question.upvote.length - question.downvote.length;
                // console.log("count", count);
-               if(count > 0){
+               if(count >= 0){
                 setLike(count);
+               }else{
+                setLike("-1");
                }
                 console.log('Fetched answers:', answer);
                 // console.log('Fetched question:', question);
@@ -132,7 +142,7 @@ function MainQuestion({ id }) {
         };
 
         fetchData();
-    }, [id,allanswer]);
+    }, [id]);
 
     //console.log(allanswer);
     //console.log(allanswer.answers.length);
@@ -171,7 +181,7 @@ function MainQuestion({ id }) {
                                     <p className='arrow'>0</p>
                                     <p className='arrow'>▼</p> */}
                                     <p className='arrow' onClick={handleUpvote}>▲</p>
-                        <p className='arrow'>{like > 0 ? like : 0}</p>
+                        <p className='arrow'>{like}</p>
                         <p className='arrow' onClick={handleDownvote}>▼</p>
 
                                     <Bookmark />
@@ -189,15 +199,6 @@ function MainQuestion({ id }) {
                                     <p>name</p>
                                 </div>
                                 <div className='comments'>
-                                    {/* <div className='comment'>
-                                        <p>
-                                            This is comment <span>User name</span>
-                                            <small>
-                                                Time Stamp
-                                            </small>
-                                        </p>
-                                    </div> */}
-
                                     {allcomments.length > 0 && allcomments.map((comment, index) => (
                                         <div className='comment' key={index}>
                                             <p>
@@ -264,7 +265,7 @@ function MainQuestion({ id }) {
                                 <div className='author'>
                                     <small>{answer.created_at.split("T")[0]}</small>
                                     <div className='auth-details'>
-                                <Avatar>{answer.name.charAt(0)}</Avatar>
+                                {/* <Avatar>(answer.name && {answer.name.charAt(0) })</Avatar> */}
                                 </div>
                                {answer.name}
                                 </div>

@@ -60,7 +60,7 @@ export const getQuestionById = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       //console.log("Response from backend:", formattedResponse);
+       console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
         console.error("Error fetching question:", error);
@@ -72,7 +72,7 @@ export const getQuestionById = async (id) => {
 export const upvoteQuestion = async (id) => {
     try {
         const token = getToken();
-        console.log(token);
+       // console.log(token);
         const response = await fetch(`${backendUrl}/codehub/question/${id}/upvote`, {
             method: "POST",
             headers: { 
@@ -86,7 +86,7 @@ export const upvoteQuestion = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       console.log("Response from backend:", formattedResponse);
+       //console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
         console.error("Error fetching question:", error);
@@ -94,3 +94,53 @@ export const upvoteQuestion = async (id) => {
     }
 }
 
+export const getvoteQuestion = async (id) => {
+    try {
+        const token = getToken();
+        //console.log(token);
+        const response = await fetch(`${backendUrl}/codehub/question/${id}/getvote`, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const formattedResponse = await response.json();
+       //console.log("Response from backend:", formattedResponse);
+        return formattedResponse;
+    } catch (error) {
+        console.error("Error fetching question:", error);
+        throw new Error(`Error fetching question: ${error.message}`);
+    }
+}
+
+
+export const downvoteQuestion = async (id) => {
+    try {
+        const token = getToken();
+       // console.log(token);
+        const response = await fetch(`${backendUrl}/codehub/question/${id}/downvote`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const formattedResponse = await response.json();
+       //console.log("Response from backend:", formattedResponse);
+        return formattedResponse;
+    } catch (error) {
+        console.error("Error fetching question:", error);
+        throw new Error(`Error fetching question: ${error.message}`);
+    }
+}

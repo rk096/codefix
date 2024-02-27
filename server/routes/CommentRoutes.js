@@ -49,6 +49,31 @@ router.post(
     }
 );
 
+// router.get(
+//     "/que/:id",
+//     async(req,res) => {
+//     try{
+//         const {id} = req.params;
+//       const comments =  CommentModel.find({ question: id });
+    
+//         console.log("comments",comments);
+//         let commentdetails=[];
+//         // for(element of comments){
+//         //     let e1  = element.toObject();
+//         //     const id = element.user;
+//         //     const user = await UserModel.findById(id);
+//         //     e1.name = user.username;
+//         //     commentdetails.push(e1);
+//         // }
+//         res.json({ comments });
+//     }
+//     catch(error) {
+//         console.error("Error fetching comments:", error);
+//         res.status(500).json({ error: "Error fetching comments" });
+//     };
+//     }
+// )
+
 router.get(
     "/que/:id",
     async(req,res) => {

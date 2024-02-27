@@ -11,6 +11,7 @@ import { getBlogById } from '../../utils/BlogHelper';
 import ReactHtmlParser from "react-html-parser";
 import { getuname } from '../../utils/UserHelper';
 import { addComment, AllcommentsByBlog } from '../../utils/CommentHelper';
+import { getvoteBlog, upvoteBlog, downvoteBlog } from '../../utils/BlogHelper';
 
 function MainBlog({blg}) {
 
@@ -18,11 +19,12 @@ function MainBlog({blg}) {
     const [blog, setBlog] = useState(blg);
     const [uname, setUname] = useState('');
     const [comment, setComment] = useState('');
-    const [allcomments, setAllComments] = useState([])
+    const [allcomments, setAllComments] = useState([]);
+    const [like, setLike] = useState('0');
 
     const handleAddComment =  () => {
         try{ 
-            // if (comment.trim() !== ''){
+             if (comment.trim() !== ''){
             
             const com = {
                 body:comment,
@@ -33,11 +35,67 @@ function MainBlog({blg}) {
         
             console.log('Comment added successfully!');
             setComment('');
-        // }
+        }
         } catch (error) {
             console.error('Error adding comment:', error);
         }
     };
+
+    // const handleUpvote = async () => {
+       
+    //     try { 
+    //         const userexist = await getvoteBlog(blog._id);
+    //         //console.log(userexist);
+    //         if(userexist.exist != "user"){
+    //         const response = await upvoteBlog(blog._id);
+    //         let len = response.blog.upvote.length - response.question.blog.length;
+    //         console.log("u",len);
+    //         if(len <= -1){
+    //             setLike("-1");
+    //         }
+    //         else{
+    //             setLike(len);
+    //         }
+    //         }
+           
+    //         else{
+    //             alert("you already voted the question");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error upvoting question:", error);
+    //     }
+       
+    // }
+
+
+    // const handleDownvote = async () => {
+       
+    //     try {
+    //        // console.log("clcik");
+    //         const userexist = await getvoteBlog(blog._id);
+    //         //console.log("user",userexist);
+    //         if(userexist.exist != "user"){
+    //             const response = await downvoteBlog(blog._id);
+    //             console.log("downvote", response);
+    //             let len = response.blog.upvote.length - response.blog.downvote.length;
+    //             console.log("d",len);
+    //             if(len <= -1){
+    //                 setLike("-1");
+    //             }
+    //             else{
+    //                 setLike(len);
+    //             }
+    //             //console.log("len: ", len);
+    //         }
+            
+    //         else{
+    //             alert("you already voted the question");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error upvoting question:", error);
+    //     }
+       
+    // }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,12 +104,19 @@ function MainBlog({blg}) {
                 
                 const user = await getuname(blog.user)
                 const com = await AllcommentsByBlog(blog._id);
-               
+            //    let len = blog.upvote.length - blog.downvote.length;
+            //    console.log("us",len);
+            //    if(len <= -1){
+            //     setLike("-1");
+            // }
+            // else{
+            //     setLike(len);
+            // }
                //console.log('Fetched blog:', user);
-              console.log('Fetched comment:', com);
+              //console.log('Fetched comment:', com);
 
                setUname(user.username);
-                setAllComments(com);
+                setAllComments(com.comments);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -92,9 +157,9 @@ function MainBlog({blg}) {
                     <div className='all-blogs-container'>
                         <div className='all-blogs-left'>
                             <div className='all-options'>
-                                <p className='arrow'>▲</p>
-                                <p className='arrow'>0</p>
-                                <p className='arrow'>▼</p>
+                            {/* <p className='arrow' onClick={handleUpvote}>▲</p>
+                        <p className='arrow'>{like}</p>
+                        <p className='arrow' onClick={handleDownvote}>▼</p> */}
 
                                 <Bookmark />
                                 <History />
@@ -111,7 +176,7 @@ function MainBlog({blg}) {
                                 </div>
                                {uname}
                             </div>
-                            <div className='comments'>
+                            {/* <div className='comments'>
                                 <div className='comment'>
                                     <p>
                                         This is comment <span>User name</span>
@@ -119,7 +184,17 @@ function MainBlog({blg}) {
                                             Time Stamp
                                         </small>
                                     </p>
-                                </div>
+                                </div> */}
+                                <div className='comments'>
+                                    {allcomments.length > 0 && allcomments.map((comment, index) => (
+                                        <div className='comment' key={index}>
+                                            <p>
+                                                {comment.body} <span>{comment.user}</span>
+                                                <small>{comment.created_at.split("T")[0]}</small>
+                                            </p>
+                                        </div>
+                                    ))}
+
                                 <p onClick={() => setshow(!show)}>Add a comment</p>
                                 {
                                     show && (<div className='title'>

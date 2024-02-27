@@ -61,6 +61,84 @@ router.get(
         }
     }
 );
+
+router.post("/:id/upvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const blog = await BlogModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({ msg: 'blog not found' });
+        }
+        const user = req.user._id;
+
+        if (blog.upvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this blog', exist:"user" });
+        }
+        blog.upvote.push(user);
+        await blog.save();
+       // console.log("blog updated : ", blog);
+
+        res.json({  msg: 'blog upvoted successfully', blog: blog });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get("/:id/getvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const blog = await BlogModel.findById(id);
+        if (!blog) {
+            return res.status(404).json({ msg: 'blog not found' });
+        }
+        const user = req.user._id;
+        //console.log("getvote");
+        if (blog.upvote.includes(user) || blog.downvote.includes(user)) {
+            return res.json({  msg: 'User already voted', exist:"user" });
+        }else{
+            //console.log("enter");
+            return res.json({msg:'user can proceed'});
+        }
+       
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.post("/:id/downvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const blog = await BlogModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({ msg: 'blog not found' });
+        }
+        const user = req.user._id;
+
+        if (blog.downvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this blog', exist:"user" });
+        }
+        blog.downvote.push(user);
+        await blog.save();
+       console.log("blog updated : ", blog);
+
+        res.json({  msg: 'blog upvoted successfully', blog: blog });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
 // router.route("/").get(getAllBlogs).post(createBlog);
 // router.route("/:id").get(getBlogById).put(updateBlog).delete(deleteBlog);
 

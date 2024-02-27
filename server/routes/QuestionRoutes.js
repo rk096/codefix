@@ -56,6 +56,7 @@ router.get(
         const { id } = req.params; 
         try {
             const data = await QuestionModel.findById(id); 
+            console.log("data",data);
             return res.status(200).json(data);
         } catch (error) {
             console.error("Error fetching question");
@@ -76,19 +77,166 @@ async (req, res) => {
         }
         const user = req.user._id;
 
-        if (question.vote.includes(user)) {
-            return res.status(400).json({ msg: 'You have already upvoted this question' });
+        if (question.upvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question', exist:"user" });
         }
-
-       
-        question.vote.push(user);
-
+        question.upvote.push(user);
         await question.save();
        // console.log("question updated : ", question);
 
         res.json({  msg: 'Question upvoted successfully', question: question });
     } catch (err) {
         console.error("error in question upvote");
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get("/:id/getvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const question = await QuestionModel.findById(id);
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+        //console.log("getvote");
+        if (question.upvote.includes(user) || question.downvote.includes(user)) {
+            return res.json({  msg: 'User already voted', exist:"user" });
+        }else{
+            //console.log("enter");
+            return res.json({msg:'user can proceed'});
+        }
+       
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.post("/:id/downvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const question = await QuestionModel.findById(id);
+
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+
+        if (question.downvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question', exist:"user" });
+        }
+        question.downvote.push(user);
+        await question.save();
+       console.log("question updated : ", question);
+
+        res.json({  msg: 'Question upvoted successfully', question: question });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get("/:id/getvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const question = await QuestionModel.findById(id);
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+        //console.log("getvote");
+        if (question.upvote.includes(user) || question.downvote.includes(user)) {
+            return res.json({  msg: 'User already voted', exist:"user" });
+        }else{
+            //console.log("enter");
+            return res.json({msg:'user can proceed'});
+        }
+       
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.post("/:id/downvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const question = await QuestionModel.findById(id);
+
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+
+        if (question.downvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question', exist:"user" });
+        }
+        question.downvote.push(user);
+        await question.save();
+       console.log("question updated : ", question);
+
+        res.json({  msg: 'Question upvoted successfully', question: question });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get("/:id/getvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const question = await QuestionModel.findById(id);
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+        //console.log("getvote");
+        if (question.upvote.includes(user) || question.downvote.includes(user)) {
+            return res.json({  msg: 'User already voted', exist:"user" });
+        }else{
+            //console.log("enter");
+            return res.json({msg:'user can proceed'});
+        }
+       
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.post("/:id/downvote", passport.authenticate("jwt", { session: false }),
+async (req, res) => {
+    const { id } = req.params; 
+
+    try {
+        const question = await QuestionModel.findById(id);
+
+        if (!question) {
+            return res.status(404).json({ msg: 'Question not found' });
+        }
+        const user = req.user._id;
+
+        if (question.downvote.includes(user)) {
+            return res.status(400).json({ msg: 'You have already upvoted this question', exist:"user" });
+        }
+        question.downvote.push(user);
+        await question.save();
+       console.log("question updated : ", question);
+
+        res.json({  msg: 'Question upvoted successfully', question: question });
+    } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
