@@ -1,3 +1,16 @@
+.cp-index{
+    display: flex;
+    min-height: 88vh;
+    min-width: fit-content;
+}
+
+.cp-index-content{
+    display: flex;
+  width: 100%;
+  /* align-items: center; */
+  justify-content: center;
+}
+
 .users-container {
     display: flex;
     flex-wrap: wrap;
@@ -5,8 +18,9 @@
 
 .user-card {
     width: 300px;
-    margin: 20px;
-    padding: 20px;
+    height: 100px;
+    margin: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }

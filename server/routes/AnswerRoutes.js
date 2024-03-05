@@ -52,11 +52,11 @@ router.get(
 );
 
 router.get(
-    "/xyz/:id",
+    "/que/:id",
     async(req,res) => {
     try{
         const {id} = req.params;
-    const answers =  await AnswerModel.find({ question: id });
+        const answers =  await AnswerModel.find({ question: id });
     
         console.log(answers);
         let answerdetails=[];
@@ -65,6 +65,7 @@ router.get(
             const id = element.user;
             const user = await UserModel.findById(id);
             e1.name = user.username;
+            e1.email = user.email;
             answerdetails.push(e1);
         }
 
@@ -75,6 +76,37 @@ router.get(
         res.status(500).json({ error: "Error fetching answers" });
     };
 });
+
+// get all answers of a user with ':id'
+router.get(
+    "/owner/:id",
+    async(req,res) => {
+    try{
+        const {id} = req.params;
+        const answers =  await AnswerModel.find({ user: id });
+
+        res.status(200).json(answers);
+    }
+    catch(error){
+        console.error("Error fetching answers by user id");
+        res.status(500).json({ error: "Error fetching answers by user id" });
+    };
+});
+
+router.delete(
+    "/delete/:id",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        try {
+        const { id } = req.params;
+        const deletedans = await AnswerModel.findByIdAndDelete(id, { new: true });
+        return res.status(200).json(deletedans);
+    }catch(error){
+        console.error("Error deleting comment");
+        return res.status(500).json({ error: "Error deleting comment" });
+    }
+}
+);
     
 // router.route("/").get(getAllAnswers).post(createAnswer);
 // router.route("/:id").get(getAnswerById).put(updateAnswer).delete(deleteAnswer);

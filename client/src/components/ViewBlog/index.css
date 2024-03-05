@@ -21,9 +21,16 @@
   
   .arrow {
     font-size: 2rem;
-    color: rgba(0, 0, 0, 0.25);
     margin-bottom: 0px;
     margin-top: 0px;
+  }
+
+  .upvoted {
+    color: green;
+  }
+  
+  .downvoted {
+    color: red;
   }
   
   .all-options > .MuiSvgIcon-root {

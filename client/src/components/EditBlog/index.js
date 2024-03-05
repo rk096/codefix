@@ -1,42 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import { Link, useNavigate } from "react-router-dom";
-import { addblog } from '../../utils/BlogHelper';
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { updateBlog, getBlogById } from '../../utils/BlogHelper';
 
 
 function Index() {
-
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
 
-    const handleBlog = ()=>{
+    useEffect(() => {
+        const fetchBlog = async () => {
+            const blog = await getBlogById(id);
+            setTitle(blog.title);
+            setBody(blog.body);
+            setTags(blog.tags);
+        }
+        fetchBlog();
+    }, [id]);
 
-        // console.log("title", title);
-        // console.log("body", body);
-        // console.log("tags", tags);
+    const handleUpdateBlog = async () =>{
+
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
             const blog = {title, body, tags};
-        console.log(blog);
-       addblog(blog);
-        navigate("/blogs");
+            console.log(blog);
+            await updateBlog(id, blog);
+            navigate(`/blog/${id}`);
         } else {
-            console.error('Insufficient details to add question.');
-           alert("please fill all fields")
+            console.error('Insufficient details to update blog.');
+            alert("please fill all fields")
         }
-
-
-        
     }
     return (
         <div className='add-blog'>
             <div className='add-blog-container'>
                 <div className='head-title'>
-                    <h1>Add a Blog</h1>
+                    <h1>Edit Blog</h1>
                 </div>
 
                 <div className='blog-container'>
@@ -67,11 +71,10 @@ function Index() {
                             </div>
                         </div>
 
-
                     </div>
                 </div>
-                <button className='button' onClick={handleBlog}>Add your blog</button>
-                <Link to={`/`}>Cancel</Link>
+                <button className='button' onClick={handleUpdateBlog}>Edit Blog</button>
+                <Link to={`/blog/${id}`}>Cancel</Link>
             </div>
         </div>
     )
@@ -79,4 +82,3 @@ function Index() {
 
 
 export default Index
-

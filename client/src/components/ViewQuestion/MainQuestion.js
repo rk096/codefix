@@ -3,31 +3,30 @@ import React, { useEffect } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
-import Bookmark from "@material-ui/icons/Bookmark";
-import History from "@material-ui/icons/History";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from 'react';
-import { addanswer } from '../../utils/AnswerHelper';
-import { fetchAllAnswers } from '../../utils/AnswerHelper';
+import { addanswer, fetchAllAnswers, deleteAnswer } from '../../utils/AnswerHelper';
+import { getUser, getUserByEmail } from '../../utils/UserHelper';
 import ReactHtmlParser from "react-html-parser";
-import { downvoteQuestion, getQuestionById, getvoteQuestion, upvoteQuestion } from '../../utils/QuestionHelper';
-import { getuname } from '../../utils/UserHelper';
-import { addComment, AllcommentsByQuestion } from '../../utils/CommentHelper';
+import { downvoteQuestion, getQuestionById, getvoteQuestion, upvoteQuestion, deleteQuestion } from '../../utils/QuestionHelper';
+import { addComment, AllcommentsByQuestion, deleteComment } from '../../utils/CommentHelper';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/userSlice';
 
 function MainQuestion({ id }) {
 
+    const authUser = useSelector(selectUser);
+    const [owner, setOwner] = useState('');
+    const navigate = useNavigate();
     const [show, setshow] = useState(false);
     const [answer, setAnswer] = useState('');
     const [allanswer, setAllanswer] = useState([]);
     const [ques, setQuestion] = useState('');
-    // const [ansuname, setAnsUname] = useState('');
     const [comment, setComment] = useState('');
     const [allcomments, setAllComments] = useState([]);
-    const [upvoted, setUpvoted] = useState(false);
-    const [downvoted, setDownvoted] = useState(false);
-    const [like, setLike] = useState('0');
-
-    // console.log("ques", ques);
+    const [like, setLike] = useState(0);
+    const [userHasUpvoted, setUserHasUpvoted] = useState(false);
+    const [userHasDownvoted, setUserHasDownvoted] = useState(false);
 
     const handlePostAnswer = async () => {
 
@@ -36,83 +35,99 @@ function MainQuestion({ id }) {
             return;
         }
         const ans = { body: answer, question: id }
-        const data = await addanswer(ans);
-        setAllanswer([...allanswer, data]);
+        await addanswer(ans);
+        const answers = await fetchAllAnswers(id);
         setAnswer('');
-
-        // console.log(data);
+        setAllanswer(answers.answers);
     }
 
     const handleUpvote = async () => {
-       
-        try { 
+        try {
             const userexist = await getvoteQuestion(id);
-            //console.log(userexist);
-            if(userexist.exist != "user"){
-            const response = await upvoteQuestion(id);
-            let len = response.question.upvote.length - response.question.downvote.length;
-            if(len <= -1){
-                setLike("-1");
-            }
-            else{
+            if (userexist.exist !== "user") {
+                const response = await upvoteQuestion(id);
+                let len = response.question.upvote.length - response.question.downvote.length;
+                if (userHasUpvoted)
+                    setUserHasUpvoted(false);
+                else {
+                    setUserHasUpvoted(true);
+                    setUserHasDownvoted(false);
+                }
                 setLike(len);
             }
-            }
-           
-            else{
+            else {
                 alert("you already voted the question");
             }
         } catch (error) {
             console.error("Error upvoting question:", error);
         }
-       
-    }
 
+    }
 
     const handleDownvote = async () => {
-       
         try {
-            console.log("clcik");
             const userexist = await getvoteQuestion(id);
-            console.log("user",userexist);
-            if(userexist.exist != "user"){
+            if (userexist.exist !== "user") {
                 const response = await downvoteQuestion(id);
-                console.log("downvote", response);
                 let len = response.question.upvote.length - response.question.downvote.length;
-                if(len <= -1){
-                    setLike("-1");
+                if (userHasDownvoted)
+                    setUserHasDownvoted(false);
+                else {
+                    setUserHasDownvoted(true);
+                    setUserHasUpvoted(false);
                 }
-                else{
-                    setLike(len);
-                }
-                //console.log("len: ", len);
+                setLike(len);
             }
-            
-            else{
+            else {
                 alert("you already voted the question");
             }
         } catch (error) {
-            console.error("Error upvoting question:", error);
+            console.error("Error downvoting question:", error);
         }
-       
     }
 
-    const handleAddComment = () => {
+    const handleAddComment = async () => {
         try {
-            if (comment.trim() !== '') {
-
-                const com = {
-                    body: comment,
-                    question: id
-                }
-                //console.log(com);
-                addComment(com);
-
-                console.log('Comment added successfully!');
-                setComment('');
+            if (comment.trim() === '') {
+                alert("plese fill comment");
+                return;
             }
+            const com = {
+                body: comment,
+                question: id
+            }
+            await addComment(com);
+            const comnt = await AllcommentsByQuestion(id);
+            setComment('');
+            setAllComments(comnt.comments);
         } catch (error) {
             console.error('Error adding comment:', error);
+        }
+    };
+
+    const handleQuestionDelete = async (id) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Question?');
+        if (confirmDelete) {
+            await deleteQuestion(id);
+            navigate('/');
+        }
+    };
+
+    const handleCommentDelete = async (cid) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Comment?');
+        if (confirmDelete) {
+            await deleteComment(cid);
+            const cmnts = await AllcommentsByQuestion(id);
+            setAllComments(cmnts.comments);
+        }
+    };
+
+    const handleAnswerDelete = async (aid) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Answer?');
+        if (confirmDelete) {
+            await deleteAnswer(aid);
+            const anss = await fetchAllAnswers(id);
+            setAllanswer(anss.answers);
         }
     };
 
@@ -122,20 +137,23 @@ function MainQuestion({ id }) {
                 const answer = await fetchAllAnswers(id);
                 const question = await getQuestionById(id);
                 const com = await AllcommentsByQuestion(id);
+                const user = await getUser(question.user);
                 const count = question.upvote.length - question.downvote.length;
-               // console.log("count", count);
-               if(count >= 0){
-                setLike(count);
-               }else{
-                setLike("-1");
-               }
-                console.log('Fetched answers:', answer);
-                // console.log('Fetched question:', question);
-                console.log('Fetched comment:', com);
 
+                const mUserForVote = await getUserByEmail(authUser.email);
+                if (question.upvote.includes(mUserForVote._id)) {
+                    setUserHasUpvoted(true);
+                }
+                else if (question.downvote.includes(mUserForVote._id)) {
+                    setUserHasDownvoted(true);
+                }
+
+                setLike(count);
+                setOwner(user);
                 setAllanswer(answer.answers);
                 setQuestion(question);
                 setAllComments(com.comments);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -144,9 +162,8 @@ function MainQuestion({ id }) {
         fetchData();
     }, [id]);
 
-    //console.log(allanswer);
-    //console.log(allanswer.answers.length);
-    //console.log(allcomments);
+    useEffect(() => {
+    }, [allanswer, allcomments, like]);
 
     function truncate(str, n) {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -167,9 +184,8 @@ function MainQuestion({ id }) {
                 </div>
                 <div className='main-desc'>
                     <div className='info'>
-                        <p>Timestamp</p>
-                        <p>Active <span>today</span></p>
-                        <p>Viewed <span>43 times</span> </p>
+                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-question/${id}`}>edit</Link>)}</p>
+                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleQuestionDelete(ques._id)}>delete</Link>)}</p>
                     </div>
                 </div>
                 {ques && (
@@ -177,15 +193,9 @@ function MainQuestion({ id }) {
                         <div className='all-questions-container'>
                             <div className='all-questions-left'>
                                 <div className='all-options'>
-                                    {/* <p className='arrow'>▲</p>
-                                    <p className='arrow'>0</p>
-                                    <p className='arrow'>▼</p> */}
-                                    <p className='arrow' onClick={handleUpvote}>▲</p>
-                        <p className='arrow'>{like}</p>
-                        <p className='arrow' onClick={handleDownvote}>▼</p>
-
-                                    <Bookmark />
-                                    <History />
+                                    <p className={`arrow ${userHasUpvoted ? 'upvoted' : ''}`} onClick={handleUpvote}>▲</p>
+                                    <p className='arrow'>{like}</p>
+                                    <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p> 
                                 </div>
                             </div>
                             <div className='question-answer'>
@@ -194,17 +204,21 @@ function MainQuestion({ id }) {
                                 <div className='author'>
                                     <small>asked "{ques.created_at.split("T")[0]}"</small>
                                     <div className='auth-details'>
-                                    {/* <Avatar>{answer.name.charAt(0)}</Avatar> */}
+                                        <Link to={`/user/${owner._id}`}>
+                                            <Avatar>{owner.username.charAt(0)}</Avatar> <span>{owner.username}</span>
+                                        </Link>
                                     </div>
-                                    <p>name</p>
                                 </div>
+
+
                                 <div className='comments'>
-                                    {allcomments.length > 0 && allcomments.map((comment, index) => (
+                                    {allcomments.length > 0 && allcomments.map((cmnt, index) => (
                                         <div className='comment' key={index}>
                                             <p>
-                                                {comment.body} <span>{comment.user}</span>
-                                                <small>{comment.created_at.split("T")[0]}</small>
+                                                <span><Link to={`/user/${cmnt.user}`}>{cmnt.name}</Link></span> : {cmnt.body}
+                                                <small> at {cmnt.created_at.split("T")[0]}</small>
                                             </p>
+                                            <p>{(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && (<Link onClick={() => handleCommentDelete(cmnt._id)}>delete</Link>)}</p>
                                         </div>
                                     ))}
 
@@ -232,6 +246,7 @@ function MainQuestion({ id }) {
                                         </div>
                                     )}
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -243,21 +258,15 @@ function MainQuestion({ id }) {
                     <p style={{
                         marginBottom: "20px",
                         fontSize: "1.3rem",
-                        fontWeight: "300",
-                    }}>No of answers :{allanswer.length}</p>
+                        fontWeight: "bold",
+                    }}>{allanswer.length} Answers :</p>
 
 
                     {allanswer.length > 0 && allanswer.map((answer, index) => (
                         <div className='all-questions-container' key={index}>
                             <div className='all-questions-left'>
                                 <div className='all-options'>
-                                    <React.Fragment>
-                                        <p className='arrow'>▲</p>
-                                        <p className='arrow'>0</p>
-                                        <p className='arrow'>▼</p>
-                                    </React.Fragment>
-                                    <Bookmark />
-                                    <History />
+                                <p>{(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (<Link onClick={() => handleAnswerDelete(answer._id)}>delete</Link>)}</p>
                                 </div>
                             </div>
                             <div className='question-answer'>
@@ -265,9 +274,10 @@ function MainQuestion({ id }) {
                                 <div className='author'>
                                     <small>{answer.created_at.split("T")[0]}</small>
                                     <div className='auth-details'>
-                                {/* <Avatar>(answer.name && {answer.name.charAt(0) })</Avatar> */}
-                                </div>
-                               {answer.name}
+                                    </div>
+                                    <Link to={`/user/${answer.user}`}>
+                                        {answer.name}
+                                    </Link>
                                 </div>
                             </div>
                         </div>

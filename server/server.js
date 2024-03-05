@@ -57,6 +57,11 @@ passport.use(
 );
 
 
+// Cors
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
+
 
 // API
 app.use('/auth/', authRouter);
@@ -78,9 +83,6 @@ app.use("/codehub/answer", answerRouter);
 //     }
 // })
 
-
-// Cors
-app.use(cors())
 
 app.get('/', (req,res)=>{
     res.send("welcome to code hub");

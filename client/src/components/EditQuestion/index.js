@@ -1,46 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import {addquestion} from '../../utils/QuestionHelper';
 import { Link, useNavigate } from "react-router-dom";
-
-
+import { updateQuestion, getQuestionById } from '../../utils/QuestionHelper';
 
 const Index = () => {
-
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
-    
 
-    const handleAddQuestion = async () => {
-
-        // console.log("title", title);
-        // console.log("body", body);
-        // console.log("tags", tags);
-        if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
-            const question = {title, body, tags};
-            await addquestion(question);
-            navigate("/");
-        } else {
-            console.error('Insufficient details to add question.');
-           alert("please fill all fields")
+    useEffect(() => {
+        const fetchQuestion = async () => {
+            const question = await getQuestionById(id);
+            setTitle(question.title);
+            setBody(question.body);
+            setTags(question.tags);
         }
+        fetchQuestion();
+    }, [id]);
 
-        // const question = {title, body, tags};
-        // addquestion(question);
-        // navigate("/");
-
+    const handleUpdateQuestion = async () => {
+        if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
+            const ques = {title, body, tags};
+            await updateQuestion(id, ques);
+            navigate(`/question/${id}`);
+        } else {
+            console.error('Insufficient details to update question.');
+            alert("please fill all fields")
+        }
     }
 
     return (
         <div className='add-question'>
             <div className='add-question-container'>
                 <div className='head-title'>
-                    <h1>Ask a Public question</h1>
+                    <h1>Edit Question</h1>
                 </div>
 
 
@@ -76,8 +75,8 @@ const Index = () => {
 
                     </div>
                 </div>
-                <button className='button' onClick={handleAddQuestion}>Add your question</button>
-                <Link to={`/`}>Cancel</Link>
+                <button className='button' onClick={handleUpdateQuestion}>Edit question</button>
+                <Link to={`/question/${id}`}>Cancel</Link>
             </div>
            
         </div>
@@ -86,4 +85,3 @@ const Index = () => {
 
 
 export default Index
-

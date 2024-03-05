@@ -1,32 +1,33 @@
 import { Avatar } from '@mui/material';
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './css/allblog.css';
 import ReactHtmlParser from "react-html-parser";
-import { getuname } from '../../utils/UserHelper';
+import { getUser } from '../../utils/UserHelper';
 
 
-function AllBlogs({data}) {
+function AllBlogs({ data}) {
 
-     //console.log("blog",data);
-
-     const [user, setUser] = useState('');
+    const [user, setUser] = useState('');
+    const [like, setLike] = useState('0');
 
     useEffect(() => {
         const fetchusername = async () => {
-            try{
-                const user = await getuname(data.user);
+            try {
+                const user = await getUser(data.user);
+                let len = data.upvote.length - data.downvote.length;
+                setLike(len);
                 setUser(user.username);
-            }catch (error) {
+            } catch (error) {
                 console.error('Error fetching username:', error.message);
             }
         };
         fetchusername();
-    }, [data.user]);
+    }, []);
 
-     function truncate(str, n) {
+    function truncate(str, n) {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-      }
+    }
 
     return (
         <div className='all-blogs'>
@@ -34,7 +35,7 @@ function AllBlogs({data}) {
                 <div className='all-blogs-left'>
                     <div className='all-options'>
                         <div className='all-option'>
-                            <p>0</p>
+                            <p>{like}</p>
                             <span>Votes</span>
                         </div>
 
@@ -49,23 +50,25 @@ function AllBlogs({data}) {
                         width: "90%"
                     }}>
                         <div>{ReactHtmlParser(truncate(data.body, 200))}</div>
-                        
+
 
                     </div>
                     <div style={{
                         display: "flex"
                     }}>
-                         {data.tags.map((tag) => 
-                        <span className='question-tag'>{tag}</span>
-                    )
-                    }
+                        {data.tags.map((tag) =>
+                            <span className='question-tag'>{tag}</span>
+                        )
+                        }
 
                     </div>
                     <div className='author'>
                         <small>{data.created_at.split("T")[0]}</small>
                         <div className='author-deatails'>
-                        <Avatar>{user?.charAt(0)}</Avatar>
+                        <Link to={`/user/${data.user}`}>
+                            <Avatar>{user?.charAt(0)}</Avatar>
                             <p>{user}</p>
+                        </Link>
                         </div>
 
                     </div>

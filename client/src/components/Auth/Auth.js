@@ -9,6 +9,8 @@ import { auth, provider } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { createUser, loginUser } from '../../utils/ServerHelpers';
 import { useCookies } from 'react-cookie';
+import { IconButton } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 
 const Auth = () => {
@@ -22,32 +24,32 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [cookies, setCookie, /* removeCookie */] = useCookies(["token"]);
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSwitch = () => {
     setIsSignup(!isSignup)
   }
 
 
-  const handleSignInGoogle = () => {
-    signInWithPopup(auth, provider).then((res) => {
-      //console.log(res);
-      // const user = res.user;
-      // console.log("token", user);
-      //     const additionalInfo = {
-      //       email: user.email,
-      //       password: password,
-      //     };
+  // const handleSignInGoogle = () => {
+  //   signInWithPopup(auth, provider).then((res) => {
+  //     //console.log(res);
+  //     // const user = res.user;
+  //     // console.log("token", user);
+  //     //     const additionalInfo = {
+  //     //       email: user.email,
+  //     //       password: password,
+  //     //     };
 
-          // loginUser(additionalInfo)
-          // .then((data) => {
-          //   console.log('User loggedin successfully:', data.message);
-          //   setCookie("token", data.token, {path:"/", maxAge:60});
-          // })
-    })
-  }
+  //     // loginUser(additionalInfo)
+  //     // .then((data) => {
+  //     //   console.log('User loggedin successfully:', data.message);
+  //     //   setCookie("token", data.token, {path:"/", maxAge:60});
+  //     // })
+  //   })
+  // }
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -57,8 +59,8 @@ const Auth = () => {
     }
     else {
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
           const user = userCredential.user;
 
           const additionalInfo = {
@@ -68,11 +70,12 @@ const Auth = () => {
           };
 
           // Create user in backend
-          createUser(additionalInfo)
+          await createUser(additionalInfo)
             .then((data) => {
-              console.log('User created successfully:', data.message);
-              setCookie("token", data.token, {path:"/", maxAge:60*60*60});
+              console.log('User created successfully:', data);
               setLoading(false);
+              setCookie("token", data.token, { path: "/", maxAge: 60 * 60 * 60 });
+              navigate('/');
             })
             .catch((error) => {
               console.error('Error creating user in backend:', error.message);
@@ -88,7 +91,7 @@ const Auth = () => {
     }
   };
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -96,8 +99,8 @@ const Auth = () => {
       setError("Required field is missing.");
       setLoading(false);
     } else {
-      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-       
+      await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
+
         const user = userCredential.user;
 
         const additionalInfo = {
@@ -106,12 +109,12 @@ const Auth = () => {
         };
 
         // log user in backend
-        loginUser(additionalInfo)
+        await loginUser(additionalInfo)
           .then((data) => {
-            console.log('User loggedin successfully:', data.message);
+            console.log('User loggedin successfully:', data);
             //console.log(data.token);
             setLoading(false);
-            setCookie("token", data.token, {path:"/", maxAge:60*60*60});
+            setCookie("token", data.token, { path: "/", maxAge: 60 * 60 * 60 });
             navigate('/');
 
           })
@@ -120,7 +123,7 @@ const Auth = () => {
             setError(error.message);
             setLoading(false);
           });
-        
+
       }).catch((error) => {
         console.log(error.code);
         setError(error.message);
@@ -133,32 +136,8 @@ const Auth = () => {
   return (
     <section className='auth-section'>
 
-
-      <div className='auth-options'>
-
-        <div className="sign-options">
-          <div onClick={handleSignInGoogle} className="single-option">
-            <img
-              alt="google"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7TjCijCsE8Ix1uSi3q8Kk4T_x1tYvALEqlA&usqp=CAU"
-            />
-            <p>Login with Google</p>
-          </div>
-          <div className="single-option">
-            <img
-              alt="github"
-              src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-            />
-            <p>Login with Github</p>
-          </div>
-        </div>
-
-      </div>
-
-
-
       <div className='auth-container'>
-        {!isSignup && <img src="" alt='logo' className='login-logo' />}
+        {!isSignup && <img src="/hotfixlogo.jpg" style={{borderRadius:'50%'}} alt='logo' className='login-logo' />}
         <form>
           {
             isSignup && (
@@ -175,9 +154,29 @@ const Auth = () => {
           <label htmlFor='password'>
             <div style={{ display: "flex" }}>
               <h4>Password</h4>
-              {!isSignup && <p className='forgot-password'>forgot pssword?</p>}
             </div>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name='password' id='password' />
+            <div style={{ position: 'relative' }}>
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? 'text' : 'password'}
+                name='password'
+                id='password'
+              />
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '2px',
+                  transform: 'translateY(-50%)', // center vertically
+                }}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </div>
+
             {isSignup && <p>Password must contain at least eight <br />characters, including at least 1 leter and 1 <br />number</p>}
           </label>
 

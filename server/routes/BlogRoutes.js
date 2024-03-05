@@ -11,6 +11,7 @@ const passport = require("passport");
 
 const router = express.Router();
 const BlogModel = require('../models/Blog');
+const CommentModel = require('../models/Comment');
 
 router.post(
     "/create",
@@ -34,11 +35,44 @@ router.post(
 }
 );
 
+router.put(
+    "/update/:id",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        try {
+        const { id } = req.params;
+        const { title, body, tags } = req.body;
+        console.log("req : ", req.body);
+        const updatedblg = await BlogModel.findByIdAndUpdate(id, {title: title, body: body, tags: tags}, { new: true });
+        return res.status(200).json(updatedblg);
+    }catch(error){
+        console.error("Error updating blog");
+        return res.status(500).json({ error: "Error updating blog" });
+    }
+}
+);
+
+router.delete(
+    "/delete/:id",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        try {
+        const { id } = req.params;
+        const deletedblg = await BlogModel.findByIdAndDelete(id, { new: true });
+        await CommentModel.deleteMany({ blog: id });
+        return res.status(200).json(deletedblg);
+    }catch(error){
+        console.error("Error deleting blog");
+        return res.status(500).json({ error: "Error deleting blog" });
+    }
+}
+);
+
 router.get(
     "/",
     async (req, res) => {
         try{
-        const data = await  BlogModel.find();
+        const data = await BlogModel.find();
         return res.status(200).json(data);
         }catch{
             console.error("Error fetching blog:");
@@ -62,7 +96,7 @@ router.get(
     }
 );
 
-router.post("/:id/upvote", passport.authenticate("jwt", { session: false }),
+router.post("/upvote/:id", passport.authenticate("jwt", { session: false }),
 async (req, res) => {
     const { id } = req.params; 
 
@@ -74,13 +108,22 @@ async (req, res) => {
         }
         const user = req.user._id;
 
-        if (blog.upvote.includes(user)) {
-            return res.status(400).json({ msg: 'You have already upvoted this blog', exist:"user" });
+        if (blog.upvote.includes(user) && blog.downvote.includes(user)) {
+            blog.upvote.pull(user);
+            blog.downvote.pull(user);
         }
-        blog.upvote.push(user);
-        await blog.save();
-       // console.log("blog updated : ", blog);
+        else if(blog.downvote.includes(user)) {
+            blog.downvote.pull(user);
+            blog.upvote.push(user);
+        }
+        else if(blog.upvote.includes(user)) {
+            blog.upvote.pull(user);
+        }
+        else {
+            blog.upvote.push(user);
+        }
 
+        await blog.save();
         res.json({  msg: 'blog upvoted successfully', blog: blog });
     } catch (err) {
         console.error(err.message);
@@ -88,7 +131,7 @@ async (req, res) => {
     }
 });
 
-router.get("/:id/getvote", passport.authenticate("jwt", { session: false }),
+router.get("/getvote/:id", passport.authenticate("jwt", { session: false }),
 async (req, res) => {
     const { id } = req.params; 
     try {
@@ -97,11 +140,9 @@ async (req, res) => {
             return res.status(404).json({ msg: 'blog not found' });
         }
         const user = req.user._id;
-        //console.log("getvote");
-        if (blog.upvote.includes(user) || blog.downvote.includes(user)) {
+        if (blog.upvote.includes(user) && blog.downvote.includes(user)) {
             return res.json({  msg: 'User already voted', exist:"user" });
         }else{
-            //console.log("enter");
             return res.json({msg:'user can proceed'});
         }
        
@@ -112,7 +153,7 @@ async (req, res) => {
 });
 
 
-router.post("/:id/downvote", passport.authenticate("jwt", { session: false }),
+router.post("/downvote/:id", passport.authenticate("jwt", { session: false }),
 async (req, res) => {
     const { id } = req.params; 
 
@@ -124,18 +165,43 @@ async (req, res) => {
         }
         const user = req.user._id;
 
-        if (blog.downvote.includes(user)) {
-            return res.status(400).json({ msg: 'You have already upvoted this blog', exist:"user" });
+        if (blog.upvote.includes(user) && blog.downvote.includes(user)) {
+            blog.upvote.pull(user);
+            blog.downvote.pull(user);
         }
-        blog.downvote.push(user);
+        else if(blog.upvote.includes(user)) {
+            blog.upvote.pull(user);
+            blog.downvote.push(user);
+        }
+        else if(blog.downvote.includes(user)) {
+            blog.downvote.pull(user);
+        }
+        else {
+            blog.downvote.push(user);
+        }
+        
         await blog.save();
-       console.log("blog updated : ", blog);
-
-        res.json({  msg: 'blog upvoted successfully', blog: blog });
+        res.json({  msg: 'blog downvoted successfully', blog: blog });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
+});
+
+// get all blogs of a user with ':id'
+router.get(
+    "/owner/:id",
+    async(req,res) => {
+    try{
+        const {id} = req.params;
+        const answers =  await BlogModel.find({ user: id });
+
+        res.status(200).json(answers);
+    }
+    catch(error){
+        console.error("Error fetching blogs by user id");
+        res.status(500).json({ error: "Error fetching blogs by user id" });
+    };
 });
 
 

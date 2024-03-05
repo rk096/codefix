@@ -68,3 +68,21 @@ export const AllcommentsByBlog = async (id) => {
         throw new Error(`Error fetching comment: ${error.message}`);
     }
 }
+
+export const deleteComment = async (id) => {
+    try {
+        const token = getToken();
+       const response = await fetch(`${backendUrl}/codehub/comment/delete/${id}`, {
+            method: "DELETE",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const formattedResponse = await response.json();
+        return formattedResponse;
+        
+    } catch (error) {
+        throw new Error(`Error deleting comment: ${error.message}`);
+    }
+};

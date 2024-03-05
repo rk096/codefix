@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
@@ -7,11 +7,15 @@ import ViewQuestion from './components/ViewQuestion';
 import AddQuestions from './components/AddQuestions';
 import AddBlog from './components/AddBlog';
 import ViewBlog from './components/ViewBlog';
+import EditQuestion from './components/EditQuestion';
+import EditBlog from './components/EditBlog';
+import EditProfile from './components/EditProfile'; 
 import Auth from './components/Auth/Auth';
 import Users from './components/Users/Users';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, selectUser } from './features/userSlice';
 import { auth } from './firebase';
+import UserProfile from './components/UserProfile/UserProfile';
 
 // Create a context to manage authentication state globally
 export const AuthContext = createContext();
@@ -22,6 +26,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+console.log("App user : ", user);
         setAuthUser({
           uid: user.uid,
           photo: user.photoURL,
@@ -79,6 +84,12 @@ function App() {
               }
             />
             <Route
+              path="/edit-question/:id"
+              element={
+                user ? <EditQuestion /> : <Navigate to="/auth" />
+              }
+            />
+            <Route
               path="/question/:id"
               element={
                 user ? <ViewQuestion /> : <Navigate to="/auth" />
@@ -91,6 +102,18 @@ function App() {
               }
             />
             <Route
+              path="/user/:id"
+              element={
+                <UserProfile />
+              }
+            />
+            <Route
+              path="/edit-user/:id"
+              element={
+                user ? <EditProfile/> : <Navigate to="/auth" />
+              }
+            />
+            <Route
               path="/blog/:id"
               element={
                 user ? <ViewBlog /> : <Navigate to="/auth" />
@@ -100,6 +123,12 @@ function App() {
               path="/add-blog"
               element={
                 user ? <AddBlog /> : <Navigate to="/auth" />
+              }
+            />
+            <Route
+              path="/edit-blog/:id"
+              element={
+                user ? <EditBlog /> : <Navigate to="/auth" />
               }
             />
              <Route

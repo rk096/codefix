@@ -1,131 +1,145 @@
 import { Avatar } from '@mui/material'
 import React from 'react'
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
-import Bookmark from "@material-ui/icons/Bookmark";
-import History from "@material-ui/icons/History";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import { getBlogById } from '../../utils/BlogHelper';
+import { getBlogById, downvoteBlog, getvoteBlog, upvoteBlog, deleteBlog } from '../../utils/BlogHelper';
 import ReactHtmlParser from "react-html-parser";
-import { getuname } from '../../utils/UserHelper';
-import { addComment, AllcommentsByBlog } from '../../utils/CommentHelper';
-import { getvoteBlog, upvoteBlog, downvoteBlog } from '../../utils/BlogHelper';
+import { getUser, getUserByEmail } from '../../utils/UserHelper';
+import { addComment, AllcommentsByBlog, deleteComment } from '../../utils/CommentHelper';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/userSlice';
 
-function MainBlog({blg}) {
+function MainBlog({ id }) {
 
+    const authUser = useSelector(selectUser);
+    const [owner, setOwner] = useState('');
+    const navigate = useNavigate();
     const [show, setshow] = useState(false);
-    const [blog, setBlog] = useState(blg);
-    const [uname, setUname] = useState('');
+    const [blog, setBlog] = useState('');
     const [comment, setComment] = useState('');
     const [allcomments, setAllComments] = useState([]);
     const [like, setLike] = useState('0');
+    const [userHasUpvoted, setUserHasUpvoted] = useState(false);
+    const [userHasDownvoted, setUserHasDownvoted] = useState(false);
 
-    const handleAddComment =  () => {
-        try{ 
-             if (comment.trim() !== ''){
-            
-            const com = {
-                body:comment,
-                blog: blg._id
+    const handleAddComment = async () => {
+        try {
+            if (comment.trim() !== '') {
+                const com = {
+                    body: comment,
+                    blog: id
+                }
+                await addComment(com);
+                const comnt = await AllcommentsByBlog(id);
+                setComment('');
+                setAllComments(comnt.comments);
             }
-            //console.log(com);
-             addComment(com);
-        
-            console.log('Comment added successfully!');
-            setComment('');
-        }
+            else {
+                alert("plese fill comment");
+                return;
+            }
         } catch (error) {
             console.error('Error adding comment:', error);
         }
     };
 
-    // const handleUpvote = async () => {
-       
-    //     try { 
-    //         const userexist = await getvoteBlog(blog._id);
-    //         //console.log(userexist);
-    //         if(userexist.exist != "user"){
-    //         const response = await upvoteBlog(blog._id);
-    //         let len = response.blog.upvote.length - response.question.blog.length;
-    //         console.log("u",len);
-    //         if(len <= -1){
-    //             setLike("-1");
-    //         }
-    //         else{
-    //             setLike(len);
-    //         }
-    //         }
-           
-    //         else{
-    //             alert("you already voted the question");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error upvoting question:", error);
-    //     }
-       
-    // }
+    const handleBlogDelete = async (id) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Blog?');
+        if (confirmDelete) {
+            await deleteBlog(id);
+            navigate('/');
+        }
+    };
 
+    const handleCommentDelete = async (cid) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this Comment?');
+        if (confirmDelete) {
+            await deleteComment(cid);
+            const cmnts = await AllcommentsByBlog(id);
+            setAllComments(cmnts.comments);
+        }
+    };
 
-    // const handleDownvote = async () => {
-       
-    //     try {
-    //        // console.log("clcik");
-    //         const userexist = await getvoteBlog(blog._id);
-    //         //console.log("user",userexist);
-    //         if(userexist.exist != "user"){
-    //             const response = await downvoteBlog(blog._id);
-    //             console.log("downvote", response);
-    //             let len = response.blog.upvote.length - response.blog.downvote.length;
-    //             console.log("d",len);
-    //             if(len <= -1){
-    //                 setLike("-1");
-    //             }
-    //             else{
-    //                 setLike(len);
-    //             }
-    //             //console.log("len: ", len);
-    //         }
-            
-    //         else{
-    //             alert("you already voted the question");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error upvoting question:", error);
-    //     }
-       
-    // }
+    const handleUpvote = async () => {
+
+        try {
+            const userexist = await getvoteBlog(id);
+            if (userexist.exist !== "user") {
+                const response = await upvoteBlog(id);
+                let len = response.blog.upvote.length - response.question.blog.length;
+                if (userHasUpvoted)
+                    setUserHasUpvoted(false);
+                else {
+                    setUserHasUpvoted(true);
+                    setUserHasDownvoted(false);
+                }
+                setLike(len);
+            }
+            else {
+                alert("you already voted the blog");
+            }
+        } catch (error) {
+            console.error("Error upvoting blog", error);
+        }
+    }
+
+    const handleDownvote = async () => {
+
+        try {
+            const userexist = await getvoteBlog(id);
+            if (userexist.exist !== "user") {
+                const response = await downvoteBlog(id);
+                let len = response.blog.upvote.length - response.blog.downvote.length;
+                if (userHasDownvoted)
+                    setUserHasDownvoted(false);
+                else {
+                    setUserHasDownvoted(true);
+                    setUserHasUpvoted(false);
+                }
+                setLike(len);
+            }
+            else {
+                alert("you already voted the blog");
+            }
+        } catch (error) {
+            console.error("Error downvoting blog:", error);
+        }
+
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
-                
-                const user = await getuname(blog.user)
-                const com = await AllcommentsByBlog(blog._id);
-            //    let len = blog.upvote.length - blog.downvote.length;
-            //    console.log("us",len);
-            //    if(len <= -1){
-            //     setLike("-1");
-            // }
-            // else{
-            //     setLike(len);
-            // }
-               //console.log('Fetched blog:', user);
-              //console.log('Fetched comment:', com);
+                const blg = await getBlogById(id);
+                const com = await AllcommentsByBlog(id);
+                const user = await getUser(blg.user)
+                const count = blg.upvote.length - blg.downvote.length;
 
-               setUname(user.username);
+                const mUserForVote = await getUserByEmail(authUser.email);
+                if (blg.upvote.includes(mUserForVote._id)) {
+                    setUserHasUpvoted(true);
+                }
+                else if (blg.downvote.includes(mUserForVote._id)) {
+                    setUserHasDownvoted(true);
+                }
+
+                setLike(count);
+                setOwner(user);
                 setAllComments(com.comments);
+                setBlog(blg);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [blog]);
+    }, [id]);
 
-    
+    useEffect(() => {
+    },[allcomments, like]);
+
     function truncate(str, n) {
         return str?.length > n ? str.substr(0, n - 1) + "..." : str;
     }
@@ -134,151 +148,91 @@ function MainBlog({blg}) {
         <div className='main'>
             <div className='main-container'>
                 <div className='main-top'>
-                { blog && (
-                    <>
-                    <h2 className='main-blog'>{blog.title}</h2>
-                    <Link to='/add-blog'>
-                        <button>Add Blog</button>
-                    </Link>
-                    </>
-                )}
+                    {blog && (
+                        <>
+                            <h2 className='main-blog'>{blog.title}</h2>
+                            <Link to='/add-blog'>
+                                <button>Add Blog</button>
+                            </Link>
+                        </>
+                    )}
                 </div>
-                
+
                 <div className='main-desc'>
                     <div className='info'>
-                        <p>Timestamp</p>
-                        <p>Active <span>today</span></p>
-                        <p>Viewed <span>43 times</span> </p>
+                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-blog/${id}`}>edit</Link>)}</p>
+                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleBlogDelete(blog._id)}>delete</Link>)}</p>
                     </div>
                 </div>
 
-                { blog && (
-                <div className='all-blogs'>
-                    <div className='all-blogs-container'>
-                        <div className='all-blogs-left'>
-                            <div className='all-options'>
-                            {/* <p className='arrow' onClick={handleUpvote}>▲</p>
-                        <p className='arrow'>{like}</p>
-                        <p className='arrow' onClick={handleDownvote}>▼</p> */}
-
-                                <Bookmark />
-                                <History />
-
-                            </div>
-                        </div>
-                        <div className='blog-answer'>
-                        {ReactHtmlParser(truncate(blog.body, 200))}
-                            <div className='author'>
-                                <small>{blog.created_at.split("T")[0]}</small>
-                               
-                                    <div className='auth-details'>
-                                <Avatar>{uname.charAt(0)}</Avatar>
+                {blog && (
+                    <div className='all-blogs'>
+                        <div className='all-blogs-container'>
+                            <div className='all-blogs-left'>
+                                <div className='all-options'>
+                                    <p className={`arrow ${userHasUpvoted ? 'upvoted' : ''}`} onClick={handleUpvote}>▲</p>
+                                    <p className='arrow'>{like}</p>
+                                    <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p>
                                 </div>
-                               {uname}
                             </div>
-                            {/* <div className='comments'>
-                                <div className='comment'>
-                                    <p>
-                                        This is comment <span>User name</span>
-                                        <small>
-                                            Time Stamp
-                                        </small>
-                                    </p>
-                                </div> */}
+                            <div className='blog-answer'>
+                                {ReactHtmlParser(truncate(blog.body, 200))}
+
+                                <div className='author'>
+                                    <small>asked "{blog.created_at.split("T")[0]}"</small>
+                                    <div className='auth-details'>
+                                        <Link to={`/user/${owner._id}`}>
+                                            <Avatar>{owner?.username.charAt(0)}</Avatar> <span>{owner.username}</span>
+                                        </Link>
+                                    </div>
+                                </div>
+
                                 <div className='comments'>
-                                    {allcomments.length > 0 && allcomments.map((comment, index) => (
+                                    {allcomments.length > 0 && allcomments.map((cmnt, index) => (
                                         <div className='comment' key={index}>
                                             <p>
-                                                {comment.body} <span>{comment.user}</span>
-                                                <small>{comment.created_at.split("T")[0]}</small>
+                                            <span><Link to={`/user/${cmnt.user}`}>{cmnt.name}</Link></span> : {cmnt.body}
+                                                <small> at {cmnt.created_at.split("T")[0]}</small>
                                             </p>
+                                            <p>{(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && (<Link onClick={() => handleCommentDelete(cmnt._id)}>delete</Link>)}</p>
                                         </div>
                                     ))}
 
-                                <p onClick={() => setshow(!show)}>Add a comment</p>
-                                {
-                                    show && (<div className='title'>
-                                        <textarea
-                                         value={comment}
+                                    <p onClick={() => setshow(!show)}>Add a comment</p>
+                                    {
+                                        show && (<div className='title'>
+                                            <textarea
+                                                value={comment}
                                                 onChange={(e) => setComment(e.target.value)}
-                                            type='text'
-                                            placeholder='Add your comment'
-                                            rows={5}
-                                            style={{
-                                                margin: "5px 0px",
-                                                padding: "10px",
-                                                border: "1px solid rgba(0,0,0,0.2)",
-                                                borderRadius: "3px",
-                                                outline: "none",
-                                                width : "100%"
-                                            }}>
+                                                type='text'
+                                                placeholder='Add your comment'
+                                                rows={5}
+                                                style={{
+                                                    margin: "5px 0px",
+                                                    padding: "10px",
+                                                    border: "1px solid rgba(0,0,0,0.2)",
+                                                    borderRadius: "3px",
+                                                    outline: "none",
+                                                    width: "100%"
+                                                }}>
 
-                                        </textarea>
-                                        <button style={{
-                                            maxWidth: "fit-content"
-                                        }} onClick={handleAddComment}>Add Comment</button>
-                                    </div>
-                                    )
-                                }
+                                            </textarea>
+                                            <button style={{
+                                                maxWidth: "fit-content"
+                                            }} onClick={handleAddComment}>Add Comment</button>
+                                        </div>
+                                        )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 )}
 
-                {/* <div style={{
-                    flexDirection: "column"
-                }} className='all-blogs'>
-                    <p style={{
-                        marginBottom: "20px",
-                        fontSize: "1.3rem",
-                        fontWeight: "300",
-                    }}>Blog Content</p> */}
-                    {/* <div className='all-blogs-container'>
-                        <div className='all-blogs-left'>
-                            <div className='all-options'>
-                                <p className='arrow'>▲</p>
-                                <p className='arrow'>0</p>
-                                <p className='arrow'>▼</p>
-
-                                <Bookmark />
-                                <History />
-
-                            </div>
-                        </div>
-
-
-                        <div className='blog-answer'>
-                            <p>This is test answer body</p>
-                            <div className='author'>
-                                <small>asked "timestamp"</small>
-                                <div className='auth-details'>
-                                    <Avatar />
-                                    <p>name</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div> */}
-                {/* </div> */}
-                {/* <div className='main-answer'>
-                    <h3 style={{
-                        fontSize: "22px",
-                        margin: "10px 0",
-                        fontWeight: "400"
-                    }}>Your answer</h3>
-                    <ReactQuill className='react-quill' theme='snow' style={{ height: "200px" }} />
-                </div>
-                <button style={{
-                    maxWidth: "fit-content",
-                    marginTop: "80px"
-                }}>Post Your Answer</button> */}
-
+                
             </div>
 
         </div>
-    )
+    );
 }
 
 export default MainBlog

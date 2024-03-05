@@ -24,7 +24,8 @@ function Sidebar() {
                         <p>Platforms</p>
                         <div className='link'>
                             <div className='link-tag'>
-                                <Link>Explore Collectives</Link>              </div>
+                                <Link>Explore Collectives</Link>              
+                            </div>
                         </div>
                     </div>
 

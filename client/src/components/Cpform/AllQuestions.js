@@ -3,33 +3,22 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './css/allquestion.css';
 import ReactHtmlParser from "react-html-parser";
-import { stringAvatar } from '../../utils/Avatar';
-import { getuname } from '../../utils/UserHelper';
+import { getUser } from '../../utils/UserHelper';
 import { fetchAllAnswers } from '../../utils/AnswerHelper';
 
 function AllQuestions({ data }) {
 
-
-    //console.log("question",data);
-    //console.log("user", data.user);
     const [user, setUser] = useState('');
     const [allanswer, setAllanswer] = useState([]);
-    const [like,setLike] = useState('0');
+    const [like, setLike] = useState('0');
 
     useEffect(() => {
         const fetchusername = async () => {
             try {
-                const user = await getuname(data.user);
+                const user = await getUser(data.user);
                 const answer = await fetchAllAnswers(data._id);
                 let len = data.upvote.length - data.downvote.length;
-                console.log("len :", len);
-                if(len >= 0){
-                    setLike(len);
-                }
-                else{
-                    setLike("-1");
-                }
-               // console.log(answers);
+                setLike(len);
                 setUser(user.username);
                 setAllanswer(answer.answers);
             } catch (error) {
@@ -37,7 +26,7 @@ function AllQuestions({ data }) {
             }
         };
         fetchusername();
-    }, [data.user]);
+    }, []);
 
 
     function truncate(str, n) {
@@ -55,15 +44,15 @@ function AllQuestions({ data }) {
                         </div>
 
                         <div className='all-option'>
-                        <p>{allanswer.length}</p>
+                            <p>{allanswer.length}</p>
                             <span>Answers</span>
                         </div>
 
-                       
+
                     </div>
                 </div>
                 <div className='question-answer'>
-                <Link to={`/question/${data._id}`}>{data.title}</Link>
+                    <Link to={`/question/${data._id}`}>{data.title}</Link>
                     <div style={{
                         width: "90%"
                     }}>
@@ -81,16 +70,12 @@ function AllQuestions({ data }) {
 
                     </div>
                     <div className='author'>
-
                         <small>{data.created_at.split("T")[0]}</small>
                         <div className='author-deatails'>
-                          
-
-                            <Avatar>{user?.charAt(0)}</Avatar>
-
-                            <p>
-                                {user}
-                            </p>
+                            <Link to={`/user/${data.user}`}>
+                                <Avatar>{user?.charAt(0)}</Avatar>
+                                <p>{user}</p>
+                            </Link>
                         </div>
 
                     </div>

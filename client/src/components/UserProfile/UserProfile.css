@@ -1,4 +1,15 @@
-/* UserProfile.css */
+.cp-index{
+    display: flex;
+    min-height: 88vh;
+    min-width: fit-content;
+}
+
+.cp-index-content{
+    display: flex;
+  width: 100%;
+  /* align-items: center; */
+  justify-content: center;
+}
 
 .user-profile-container {
     max-width: 800px;
