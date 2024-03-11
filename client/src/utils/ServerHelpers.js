@@ -26,6 +26,7 @@ const createUser = async (userData) => {
 const loginUser = async (userData) => {
 
     try{
+        console.log("kevan2")
         const response = await fetch(`${backendUrl}/auth/login`,  {
             method: 'POST',
             headers: {

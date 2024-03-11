@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import {addquestion} from '../../utils/QuestionHelper';
+import { addquestion } from '../../utils/QuestionHelper';
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -14,7 +14,7 @@ const Index = () => {
     const [body, setBody] = useState('');
     const [tags, setTags] = useState([]);
     const navigate = useNavigate();
-    
+
 
     const handleAddQuestion = async () => {
 
@@ -22,12 +22,12 @@ const Index = () => {
         // console.log("body", body);
         // console.log("tags", tags);
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
-            const question = {title, body, tags};
+            const question = { title, body, tags };
             await addquestion(question);
             navigate("/");
         } else {
             console.error('Insufficient details to add question.');
-           alert("please fill all fields")
+            alert("please fill all fields")
         }
 
         // const question = {title, body, tags};
@@ -35,6 +35,22 @@ const Index = () => {
         // navigate("/");
 
     }
+
+    const handleCancle = () => {
+        navigate("/");
+    }
+
+  
+    const handleChange = (e) => {
+        const inputValue = e.target.value;
+        if (inputValue.length <= 80) {
+            setTitle(inputValue);
+        } else {
+            
+            setTitle(inputValue.slice(0, 80));
+            alert('You can only add up to 80 characters.');
+        }
+    };
 
     return (
         <div className='add-question'>
@@ -50,7 +66,7 @@ const Index = () => {
                             <div className='title'>
                                 <h3>Title</h3>
                                 <small>Be specific and imaging you're asking a question to another person.</small>
-                                <input type='text' placeholder='Add question title' value={title} onChange={(e) => setTitle(e.target.value)} />
+                                <input type='text' placeholder='Add question title' value={title} onChange={handleChange}   />
                             </div>
                         </div>
                         <div className='question-option'>
@@ -76,10 +92,12 @@ const Index = () => {
 
                     </div>
                 </div>
-                <button className='button' onClick={handleAddQuestion}>Add your question</button>
-                <Link to={`/`}>Cancel</Link>
+                <div className='button-container'>
+                    <button className='button' onClick={handleAddQuestion}>Add your question</button>
+                    <button className='button' onClick={handleCancle}>Cancel</button>
+                </div>
             </div>
-           
+
         </div>
     )
 }

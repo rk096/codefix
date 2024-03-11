@@ -49,7 +49,7 @@ function AllBlogs({ data}) {
                     <div style={{
                         width: "90%"
                     }}>
-                        <div>{ReactHtmlParser(truncate(data.body, 200))}</div>
+                        <div>{ReactHtmlParser(truncate(data.body, 60))}</div>
 
 
                     </div>
@@ -64,10 +64,10 @@ function AllBlogs({ data}) {
                     </div>
                     <div className='author'>
                         <small>{data.created_at.split("T")[0]}</small>
-                        <div className='author-deatails'>
+                        <div className='author-details'>
                         <Link to={`/user/${data.user}`}>
                             <Avatar>{user?.charAt(0)}</Avatar>
-                            <p>{user}</p>
+                            <span>{user}</span>
                         </Link>
                         </div>
 

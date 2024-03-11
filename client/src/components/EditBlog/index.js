@@ -24,10 +24,10 @@ function Index() {
         fetchBlog();
     }, [id]);
 
-    const handleUpdateBlog = async () =>{
+    const handleUpdateBlog = async () => {
 
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
-            const blog = {title, body, tags};
+            const blog = { title, body, tags };
             console.log(blog);
             await updateBlog(id, blog);
             navigate(`/blog/${id}`);
@@ -36,6 +36,11 @@ function Index() {
             alert("please fill all fields")
         }
     }
+
+    const handleCancle = () => {
+        navigate("/");
+    }
+
     return (
         <div className='add-blog'>
             <div className='add-blog-container'>
@@ -49,7 +54,7 @@ function Index() {
                             <div className='title'>
                                 <h3>Title</h3>
                                 <small>Let your creativity shine! Enter a title that inspires and captivates your readers.</small>
-                                <input type='text' placeholder='Add blog title' value={title} onChange={(e) => setTitle(e.target.value)}/>
+                                <input type='text' placeholder='Add blog title' value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
                         </div>
                         <div className='blog-option'>
@@ -57,7 +62,7 @@ function Index() {
                             <div className='title'>
                                 <h3>Body</h3>
                                 <small>Compose the main content of your blog. Make it informative, engaging, and true to your voice.</small>
-                                <ReactQuill className='react-quill' theme='snow' value={body} onChange={(e) => setBody(e)}  />
+                                <ReactQuill className='react-quill' theme='snow' value={body} onChange={(e) => setBody(e)} />
                             </div>
 
                         </div>
@@ -66,15 +71,19 @@ function Index() {
                             <div className='title'>
                                 <h3>Tags</h3>
                                 <small>Add up to 5 tags to describe what your blog is about.</small>
-                                <TagInput  setTags={setTags} tags={tags}  />
-                              
+                                <TagInput setTags={setTags} tags={tags} />
+
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <button className='button' onClick={handleUpdateBlog}>Edit Blog</button>
-                <Link to={`/blog/${id}`}>Cancel</Link>
+                <div className='button-container'>
+                    <button className='button' onClick={handleUpdateBlog}>Edit Blog</button>
+                    <button className='button' onClick={handleCancle}>Cancel</button>
+                </div>
+
+
             </div>
         </div>
     )

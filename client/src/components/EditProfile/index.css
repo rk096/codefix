@@ -81,9 +81,15 @@
   
   .button {
     max-width: fit-content;
-    margin: 10px 0px;
+    margin-top: 10px;
+    margin-right: 10px;
   }
   
+  .button-container {
+    display: flex;
+    flex-direction: row;
+}
+
   button:hover {
     background-color: #053086;
   }

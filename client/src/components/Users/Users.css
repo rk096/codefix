@@ -1,4 +1,4 @@
-.cp-index{
+/* .cp-index{
     display: flex;
     min-height: 88vh;
     min-width: fit-content;
@@ -7,13 +7,18 @@
 .cp-index-content{
     display: flex;
   width: 100%;
-  /* align-items: center; */
-  justify-content: center;
-}
+  justify-content: center; 
+} */
+
+
 
 .users-container {
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    background-color:  #e7eaec;
 }
 
 .user-card {
@@ -21,8 +26,11 @@
     height: 100px;
     margin: 10px;
     padding: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #bababa;
     border-radius: 5px;
+    /* align-items: center; */
+    justify-content: center;
+    background-color: white;
 }
 
 .profile-pic {
@@ -41,12 +49,9 @@
     margin-bottom: 10px;
 }
 
-.links a {
-    display: inline-block;
-    margin-right: 10px;
-    color: blue;
-}
 
-.links a:hover {
-    text-decoration: underline;
+
+.user-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
 }

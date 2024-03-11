@@ -14,9 +14,9 @@ import { useCookies } from 'react-cookie';
 function Header() {
 
   const user = useSelector(selectUser);
-  console.log("auth user :",user);
+  //console.log("auth user :",user);
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
   // const user = useContext(AuthContext);
   const [mongoUser, setMongoUser] = useState('');
 
@@ -39,8 +39,8 @@ function Header() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      removeCookie("token");
-      setMongoUser('');
+      removeCookie('token');
+     // setMongoUser('');
       navigate('/auth');
     } catch (error) {
       console.error('Error logging out:', error.message);
@@ -51,7 +51,7 @@ function Header() {
     <header>
       <div className='header-container'>
         <div className='header-left'>
-          <Link to='/'>
+          <Link to='/' className='headerlink'>
             <img src="\hotfixlogo.jpg" alt='logo' style={{ borderRadius: '50%', width: '50px', height: '50px' }}/>
             <span>HotFix</span>
           </Link>
@@ -66,11 +66,11 @@ function Header() {
         </div>
         <div className='header-right'>
           <div className='header-right-container'>
-            {mongoUser ? 
+            {user ? 
             (
               <>
-                <Link to={`/user/${mongoUser?._id}`}>
-                <Avatar style={{ marginRight: "10px" }}>{mongoUser?.username?.charAt(0)}</Avatar>
+                <Link to={`/user/${mongoUser?._id}`} className='avtlink'>
+                <Avatar style={{ marginRight: "10px"}}>{mongoUser?.username?.charAt(0)}</Avatar>
                 </Link>
                 <Link onClick={handleLogout} className='nav-item nav-links'>Log out</Link>
               </>

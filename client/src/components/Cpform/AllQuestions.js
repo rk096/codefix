@@ -16,7 +16,7 @@ function AllQuestions({ data }) {
         const fetchusername = async () => {
             try {
                 const user = await getUser(data.user);
-                const answer = await fetchAllAnswers(data._id);
+               const answer = await fetchAllAnswers(data._id);
                 let len = data.upvote.length - data.downvote.length;
                 setLike(len);
                 setUser(user.username);
@@ -56,7 +56,7 @@ function AllQuestions({ data }) {
                     <div style={{
                         width: "90%"
                     }}>
-                        <div>{ReactHtmlParser(truncate(data.body, 200))}</div>
+                        <div>{ReactHtmlParser(truncate(data.body, 60))}</div>
 
                     </div>
                     <div style={{
@@ -71,10 +71,10 @@ function AllQuestions({ data }) {
                     </div>
                     <div className='author'>
                         <small>{data.created_at.split("T")[0]}</small>
-                        <div className='author-deatails'>
+                        <div className='author-details'>
                             <Link to={`/user/${data.user}`}>
-                                <Avatar>{user?.charAt(0)}</Avatar>
-                                <p>{user}</p>
+                                <Avatar >{user?.charAt(0)}</Avatar>
+                                <span >{user}</span>
                             </Link>
                         </div>
 

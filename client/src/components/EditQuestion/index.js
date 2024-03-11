@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -26,7 +26,7 @@ const Index = () => {
 
     const handleUpdateQuestion = async () => {
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
-            const ques = {title, body, tags};
+            const ques = { title, body, tags };
             await updateQuestion(id, ques);
             navigate(`/question/${id}`);
         } else {
@@ -34,6 +34,11 @@ const Index = () => {
             alert("please fill all fields")
         }
     }
+
+    const handleCancle = () => {
+        navigate("/");
+    }
+
 
     return (
         <div className='add-question'>
@@ -75,10 +80,15 @@ const Index = () => {
 
                     </div>
                 </div>
-                <button className='button' onClick={handleUpdateQuestion}>Edit question</button>
-                <Link to={`/question/${id}`}>Cancel</Link>
+                <div className='button-container'>
+                    <button className='button' onClick={handleUpdateQuestion}>Edit question</button>
+                    <button className='button' onClick={handleCancle}>Cancel</button>
+                </div>
+              
             </div>
-           
+          
+
+
         </div>
     )
 }

@@ -55,6 +55,10 @@ function Index() {
         }
     }
 
+    const handleCancle = () => {
+        navigate("/");
+    }
+
     return (
         <div className='add-user'>
             <div className='add-user-container'>
@@ -101,8 +105,10 @@ function Index() {
 
                     </div>
                 </div>
+                <div className='button-container'>
                 <button className='button' onClick={handleUpdateUser}>Edit user</button>
-                <Link to={`/user/${id}`}>Cancel</Link>
+                <button className='button' onClick={handleCancle}>Cancel</button>
+                </div>
             </div>
         </div>
     )

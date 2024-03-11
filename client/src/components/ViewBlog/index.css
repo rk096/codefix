@@ -61,13 +61,13 @@
 .all-blogs-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .all-blogs-left {
   display: flex;
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .all-options {
@@ -82,6 +82,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 800px;
+  overflow-wrap: break-word;
+  margin-left: 0px;
 }
 
 .main-answer {
@@ -90,3 +93,27 @@
   text-align: left;
 }
 
+.delete-link {
+  text-decoration: none; 
+  color: #828181; 
+  padding: 5px 10px; 
+  font-weight: bold;
+  transition: background-color 0.7s, box-shadow 0.3s; 
+}
+
+.delete-link:hover {
+  background-color: #f4f6f7;
+  border-radius: 10%;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5); 
+}
+
+.auth-details > a {
+  text-decoration: none;
+}
+
+.main-blog{
+    max-width: 700px;
+    overflow-wrap: break-word;
+    padding-left: 0px;
+    text-align: left;
+}

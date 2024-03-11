@@ -101,6 +101,7 @@ const Auth = () => {
     } else {
       await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
 
+        console.log("kevan");
         const user = userCredential.user;
 
         const additionalInfo = {
@@ -112,7 +113,7 @@ const Auth = () => {
         await loginUser(additionalInfo)
           .then((data) => {
             console.log('User loggedin successfully:', data);
-            //console.log(data.token);
+            console.log(data.token);
             setLoading(false);
             setCookie("token", data.token, { path: "/", maxAge: 60 * 60 * 60 });
             navigate('/');

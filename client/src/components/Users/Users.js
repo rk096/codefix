@@ -30,7 +30,7 @@ const Users = () => {
             {users.map((user) => (
               <div className="user-card" key={user._id}>
                 <Link to={`/user/${user._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <Avatar>{user?.username.charAt(0)}</Avatar>
+                  <Avatar >{user?.username.charAt(0)}</Avatar>
                   <div className="user-details">
                     <h2>{user.username}</h2>
                     {
