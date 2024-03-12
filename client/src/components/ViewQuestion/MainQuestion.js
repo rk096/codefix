@@ -99,6 +99,7 @@ function MainQuestion({ id }) {
             await addComment(com);
             const comnt = await AllcommentsByQuestion(id);
             setComment('');
+            setshow(false);
             setAllComments(comnt.comments);
         } catch (error) {
             console.error('Error adding comment:', error);

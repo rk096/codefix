@@ -1,5 +1,21 @@
 import {backendUrl, getToken} from "./Config";
 
+export const getAllUsers = async () => {
+    try {
+       const response = await fetch(`${backendUrl}/codehub/user`, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json"
+            },
+        });
+        const formattedResponse = await response.json();
+        return formattedResponse;
+        
+    } catch (error) {
+        throw new Error(`Error fetching user: ${error.message}`);
+    }
+};
+
 export const getUser = async (id) => {
     try {
        const response = await fetch(`${backendUrl}/codehub/user/id/${id}`, {

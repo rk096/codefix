@@ -1,14 +1,6 @@
 const express = require("express");
 const passport = require("passport"); 
 
-// const {
-//     getAllBlogs,
-//     createBlog,
-//     getBlogById,
-//     updateBlog,
-//     deleteBlog,
-// } = require("../controllers/BlogController");
-
 const router = express.Router();
 const BlogModel = require('../models/Blog');
 const CommentModel = require('../models/Comment');
@@ -35,6 +27,20 @@ router.post(
 }
 );
 
+router.put("/incview/:id", 
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const blog = await BlogModel.findById(id);
+        await BlogModel.findByIdAndUpdate(id, { view: blog.view + 1 });
+        return res.status(200).json({msg: "View incremented successfully"});
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        return res.status(500).json({ error: "Error fetching blog" });
+    }
+});
+
 router.put(
     "/update/:id",
     passport.authenticate("jwt", { session: false }),
@@ -42,7 +48,6 @@ router.put(
         try {
         const { id } = req.params;
         const { title, body, tags } = req.body;
-        console.log("req : ", req.body);
         const updatedblg = await BlogModel.findByIdAndUpdate(id, {title: title, body: body, tags: tags}, { new: true });
         return res.status(200).json(updatedblg);
     }catch(error){
@@ -87,7 +92,6 @@ router.get(
         const { id } = req.params; 
         try {
             const data = await BlogModel.findById(id); 
-            console.log(data);
             return res.status(200).json(data);
         } catch (error) {
             console.error("Error fetching blog:", error);
@@ -203,9 +207,5 @@ router.get(
         res.status(500).json({ error: "Error fetching blogs by user id" });
     };
 });
-
-
-// router.route("/").get(getAllBlogs).post(createBlog);
-// router.route("/:id").get(getBlogById).put(updateBlog).delete(deleteBlog);
 
 module.exports = router;

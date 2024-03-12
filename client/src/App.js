@@ -9,7 +9,7 @@ import AddBlog from './components/AddBlog';
 import ViewBlog from './components/ViewBlog';
 import EditQuestion from './components/EditQuestion';
 import EditBlog from './components/EditBlog';
-import EditProfile from './components/EditProfile'; 
+import EditProfile from './components/EditProfile';
 import Auth from './components/Auth/Auth';
 import Users from './components/Users/Users';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,6 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-console.log("App user : ", user);
         setAuthUser({
           uid: user.uid,
           photo: user.photoURL,
@@ -69,81 +68,81 @@ function App() {
     <div className="App">
       <Router>
         <AuthProvider>
-          <Header />
-          <Routes>
-            <Route
-              path="/auth"
-              element={
-                user ? <Navigate to="/" />: <Auth />
-              }
-            />
-            <Route
-              path="/add-question"
-              element={
-                user ? <AddQuestions /> : <Navigate to="/auth" />
-              }
-            />
-            <Route
-              path="/edit-question/:id"
-              element={
-                user ? <EditQuestion /> : <Navigate to="/auth" />
-              }
-            />
-            <Route
-              path="/question/:id"
-              element={
-                user ? <ViewQuestion /> : <Navigate to="/auth" />
-              }
-            />
-             <Route
-              path="/users"
-              element={
-                <Users />
-              }
-            />
-            <Route
-              path="/user/:id"
-              element={
-                <UserProfile />
-              }
-            />
-            <Route
-              path="/edit-user/:id"
-              element={
-                user ? <EditProfile/> : <Navigate to="/auth" />
-              }
-            />
-            <Route
-              path="/blog/:id"
-              element={
-                user ? <ViewBlog /> : <Navigate to="/auth" />
-              }
-            />
-             <Route
-              path="/add-blog"
-              element={
-                user ? <AddBlog /> : <Navigate to="/auth" />
-              }
-            />
-            <Route
-              path="/edit-blog/:id"
-              element={
-                user ? <EditBlog /> : <Navigate to="/auth" />
-              }
-            />
-             <Route
-              path="/blogs"
-              element={
-                <Cpform /> 
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <Cpform />
-              }
-            />
-          </Routes>
+            <Header />
+            <Routes>
+              <Route
+                path="/auth"
+                element={
+                  user ? <Navigate to="/" /> : <Auth />
+                }
+              />
+              <Route
+                path="/add-question"
+                element={
+                  user ? <AddQuestions /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/edit-question/:id"
+                element={
+                  user ? <EditQuestion /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/question/:id"
+                element={
+                  user ? <ViewQuestion /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <Users />
+                }
+              />
+              <Route
+                path="/user/:id"
+                element={
+                  <UserProfile />
+                }
+              />
+              <Route
+                path="/edit-user/:id"
+                element={
+                  user ? <EditProfile /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/blog/:id"
+                element={
+                  user ? <ViewBlog /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/add-blog"
+                element={
+                  user ? <AddBlog /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/edit-blog/:id"
+                element={
+                  user ? <EditBlog /> : <Navigate to="/auth" />
+                }
+              />
+              <Route
+                path="/blogs"
+                element={
+                  <Cpform />
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <Cpform />
+                }
+              />
+            </Routes>
         </AuthProvider>
       </Router>
     </div>

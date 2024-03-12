@@ -3,15 +3,6 @@ const passport = require("passport");
 const AnswerModel = require("../models/Answer");
 const UserModel = require("../models/User");
 
-
-// const {
-//     getAllAnswers,
-//     createAnswer,
-//     getAnswerById,
-//     updateAnswer,
-//     deleteAnswer,
-// } = require("../controllers/AnswerController");
-
 const router = express.Router();
 
 router.post(
@@ -107,8 +98,5 @@ router.delete(
     }
 }
 );
-    
-// router.route("/").get(getAllAnswers).post(createAnswer);
-// router.route("/:id").get(getAnswerById).put(updateAnswer).delete(deleteAnswer);
 
 module.exports = router;

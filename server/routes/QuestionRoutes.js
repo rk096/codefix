@@ -4,15 +4,6 @@ const QuestionModel = require("../models/Question");
 const CommentModel = require("../models/Comment");
 const AnswerModel = require("../models/Answer");
 
-// const {
-//     getAllQuestions,
-//     createQuestion,
-//     getQuestionById,
-//     updateQuestion,
-//     deleteQuestion,
-// } = require("../controllers/QuestionController");
-
-
 const router = express.Router();
 
 router.post(
@@ -74,7 +65,14 @@ router.get(
     "/",
     async (req, res) => {
         try {
-        const data = await QuestionModel.find();
+        const queDetails = await QuestionModel.find();
+        let data = [];
+        for (let element of queDetails) {
+            let e1 = element.toObject();
+            const ans = await AnswerModel.find({question: e1._id});
+            e1.answer_length = ans.length;
+            data.push(e1);
+        }
         return res.status(200).json(data);
         }catch(error){
             console.error("error fetching question");
@@ -142,11 +140,9 @@ async (req, res) => {
             return res.status(404).json({ msg: 'Question not found' });
         }
         const user = req.user._id;
-        //console.log("getvote");
         if (question.upvote.includes(user) && question.downvote.includes(user)) {
             return res.json({  msg: 'User already voted', exist:"user" });
         }else{
-            //console.log("enter");
             return res.json({msg:'user can proceed'});
         }
        
@@ -206,8 +202,5 @@ router.get(
         res.status(500).json({ error: "Error fetching answers by user id" });
     };
 });
-
-// router.route("/").get(getAllQuestions).post(createQuestion);
-// router.route("/:id").get(getQuestionById).put(updateQuestion).delete(deleteQuestion);
 
 module.exports = router;

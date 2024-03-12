@@ -5,13 +5,6 @@ const BlogModel = require("../models/Blog");
 const CommentModel = require("../models/Comment");
 const AnswerModel = require("../models/Answer");
 const QuestionModel = require("../models/Question");
-// const {
-//     getAllUsers,
-//     createUser,
-//     getUserById,
-//     updateUser,
-//     deleteUser,
-// } = require("../controllers/UserController");
 
 const router = express.Router();
 
@@ -92,9 +85,6 @@ router.delete(
     }
 }
 );
-
-// router.route("/").get(getAllUsers).post(createUser);
-// router.route("/:id").get(getUserById).put(updateUser).delete(deleteUser);
 
 module.exports = router;
 

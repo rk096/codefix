@@ -3,14 +3,6 @@ const CommentModel = require('../models/Comment');
 const passport = require("passport");
 const UserModel = require('../models/User');
 
-// const {
-//     getAllComments,
-//     createComment,
-//     getCommentById,
-//     updateComment,
-//     deleteComment,
-// } = require("../controllers/CommentController");
-
 const router = express.Router();
 
 router.post(
@@ -49,31 +41,6 @@ router.post(
         }
     }
 );
-
-// router.get(
-//     "/que/:id",
-//     async(req,res) => {
-//     try{
-//         const {id} = req.params;
-//       const comments =  CommentModel.find({ question: id });
-
-//         console.log("comments",comments);
-//         let commentdetails=[];
-//         // for(element of comments){
-//         //     let e1  = element.toObject();
-//         //     const id = element.user;
-//         //     const user = await UserModel.findById(id);
-//         //     e1.name = user.username;
-//         //     commentdetails.push(e1);
-//         // }
-//         res.json({ comments });
-//     }
-//     catch(error) {
-//         console.error("Error fetching comments:", error);
-//         res.status(500).json({ error: "Error fetching comments" });
-//     };
-//     }
-// )
 
 router.get(
     "/que/:id",
@@ -141,23 +108,5 @@ router.delete(
     }
 }
 );
-
-// router.get(
-//     "/",
-//     async(req,res) => {
-//         const {questioId} = req.query();
-//         Answer.find({ questionId: questionId })
-//     .then(answers => {
-//         res.json({ answers });
-//     })
-//     .catch(error => {
-//         console.error("Error fetching answers:", error);
-//         res.status(500).json({ error: "Error fetching answers" });
-//     });
-//     }
-// )
-
-// router.route("/").get(getAllComments).post(createComment);
-// router.route("/:id").get(getCommentById).put(updateComment).delete(deleteComment);
 
 module.exports = router;
