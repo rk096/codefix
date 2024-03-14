@@ -1,53 +1,31 @@
 import './Auth.css';
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 import React, { useState } from "react";
-import { auth, provider } from "../../firebase";
+import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { createUser, loginUser } from '../../utils/ServerHelpers';
 import { useCookies } from 'react-cookie';
 import { IconButton } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 
-
 const Auth = () => {
 
   const navigate = useNavigate();
-
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [cookies, setCookie, /* removeCookie */] = useCookies(["token"]);
+  const [, setCookie, ] = useCookies(["token"]);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSwitch = () => {
     setIsSignup(!isSignup)
   }
-
-
-  // const handleSignInGoogle = () => {
-  //   signInWithPopup(auth, provider).then((res) => {
-  //     //console.log(res);
-  //     // const user = res.user;
-  //     // console.log("token", user);
-  //     //     const additionalInfo = {
-  //     //       email: user.email,
-  //     //       password: password,
-  //     //     };
-
-  //     // loginUser(additionalInfo)
-  //     // .then((data) => {
-  //     //   console.log('User loggedin successfully:', data.message);
-  //     //   setCookie("token", data.token, {path:"/", maxAge:60});
-  //     // })
-  //   })
-  // }
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -72,7 +50,7 @@ const Auth = () => {
           // Create user in backend
           await createUser(additionalInfo)
             .then((data) => {
-              console.log('User created successfully:', data);
+              localStorage.setItem('userData', JSON.stringify(data));
               setLoading(false);
               setCookie("token", data.token, { path: "/", maxAge: 60 * 60 * 60 });
               navigate('/');
@@ -85,7 +63,7 @@ const Auth = () => {
         })
         .catch((error) => {
           console.error('Error creating user:', error.code, error.message);
-          setError(error.message);
+          setError("User already exists, use different email !");
           setLoading(false);
         });
     }
@@ -100,8 +78,6 @@ const Auth = () => {
       setLoading(false);
     } else {
       await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
-
-        console.log("kevan");
         const user = userCredential.user;
 
         const additionalInfo = {
@@ -112,8 +88,7 @@ const Auth = () => {
         // log user in backend
         await loginUser(additionalInfo)
           .then((data) => {
-            console.log('User loggedin successfully:', data);
-            console.log(data.token);
+            localStorage.setItem('userData', JSON.stringify(data));
             setLoading(false);
             setCookie("token", data.token, { path: "/", maxAge: 60 * 60 * 60 });
             navigate('/');
@@ -127,7 +102,7 @@ const Auth = () => {
 
       }).catch((error) => {
         console.log(error.code);
-        setError(error.message);
+        setError("Invalid credentials !");
         setLoading(false);
       })
     }
@@ -206,9 +181,3 @@ const Auth = () => {
 }
 
 export default Auth
-
-
-
-
-
-

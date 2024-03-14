@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { updateQuestion, getQuestionById } from '../../utils/QuestionHelper';
 
 const Index = () => {
@@ -36,7 +36,7 @@ const Index = () => {
     }
 
     const handleCancle = () => {
-        navigate("/");
+        navigate(`/question/${id}`);
     }
 
 

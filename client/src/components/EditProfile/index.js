@@ -1,12 +1,15 @@
 import './index.css';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { updateUser, getUser } from '../../utils/UserHelper';
 import React, { useState, useEffect } from 'react';
 import { getAuth, updatePassword } from 'firebase/auth';
 import { IconButton } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/userSlice';
 
 function Index() {
+    const authUser = useSelector(selectUser);
     const { id } = useParams();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -56,7 +59,7 @@ function Index() {
     }
 
     const handleCancle = () => {
-        navigate("/");
+        navigate(`/user/${id}`);
     }
 
     return (

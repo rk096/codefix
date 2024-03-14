@@ -4,9 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
 import { addquestion } from '../../utils/QuestionHelper';
-import { Link, useNavigate } from "react-router-dom";
-
-
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
 
@@ -17,10 +15,6 @@ const Index = () => {
 
 
     const handleAddQuestion = async () => {
-
-        // console.log("title", title);
-        // console.log("body", body);
-        // console.log("tags", tags);
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
             const question = { title, body, tags };
             await addquestion(question);
@@ -29,11 +23,6 @@ const Index = () => {
             console.error('Insufficient details to add question.');
             alert("please fill all fields")
         }
-
-        // const question = {title, body, tags};
-        // addquestion(question);
-        // navigate("/");
-
     }
 
     const handleCancle = () => {
@@ -85,7 +74,6 @@ const Index = () => {
                                 <h3>Tags</h3>
                                 <small>Add up to 5 tags to describe what your question is about.</small>
                                 <TagInput setTags={setTags} tags={tags} />
-                                {/* <TagsInput name='tags' placeHolder='press enter to add new tag' /> */}
                             </div>
                         </div>
 

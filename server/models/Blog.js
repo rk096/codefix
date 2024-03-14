@@ -17,6 +17,10 @@ const blogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }],
+    view: {
+        type: Number,
+        default: 0
+    },
     created_at: {
         type: Date,
         default: Date.now()

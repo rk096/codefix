@@ -40,6 +40,23 @@ export const updateBlog = async (id, blog) => {
     }
 };
 
+export const incrementBlogView = async (id) => {
+    try {
+        const token = getToken();
+        const response = await fetch(`${backendUrl}/codehub/blog/incview/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const formattedResponse = await response.json();
+        return formattedResponse;
+    } catch (error) {
+        throw new Error(`Error incrementing blog view: ${error.message}`);
+    }
+};
+
 export const deleteBlog = async (id) => {
     try {
         const token = getToken();
@@ -120,7 +137,7 @@ export const upvoteBlog = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       //console.log("Response from backend:", formattedResponse);
+    //    console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
         console.error("Error fetching blog:", error);
@@ -145,7 +162,7 @@ export const getvoteBlog = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       console.log("Response from backend:", formattedResponse);
+    //    console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
         console.error("Error fetching blog:", error);

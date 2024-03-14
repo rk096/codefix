@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateBlog, getBlogById } from '../../utils/BlogHelper';
 
 
@@ -38,7 +38,7 @@ function Index() {
     }
 
     const handleCancle = () => {
-        navigate("/");
+        navigate(`/blog/${id}`);
     }
 
     return (

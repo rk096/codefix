@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import { getBlogById, downvoteBlog, getvoteBlog, upvoteBlog, deleteBlog } from '../../utils/BlogHelper';
+import { getBlogById, downvoteBlog, getvoteBlog, upvoteBlog, deleteBlog, incrementBlogView } from '../../utils/BlogHelper';
 import ReactHtmlParser from "react-html-parser";
 import { getUser, getUserByEmail } from '../../utils/UserHelper';
 import { addComment, AllcommentsByBlog, deleteComment } from '../../utils/CommentHelper';
@@ -36,6 +36,7 @@ function MainBlog({ id }) {
                 await addComment(com);
                 const comnt = await AllcommentsByBlog(id);
                 setComment('');
+                setshow(false);
                 setAllComments(comnt.comments);
             }
             else {
@@ -74,7 +75,7 @@ function MainBlog({ id }) {
             const userexist = await getvoteBlog(id);
             if (userexist.exist !== "user") {
                 const response = await upvoteBlog(id);
-                let len = response.blog.upvote.length - response.question.blog.length;
+                let len = response.blog.upvote.length - response.blog.downvote.length;
                 if (userHasUpvoted)
                     setUserHasUpvoted(false);
                 else {
@@ -118,6 +119,7 @@ function MainBlog({ id }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                await incrementBlogView(id);
                 const blg = await getBlogById(id);
                 const com = await AllcommentsByBlog(id);
                 const user = await getUser(blg.user)
@@ -192,10 +194,16 @@ function MainBlog({ id }) {
                         <div className='all-blogs-container'>
                             <div className='all-blogs-left'>
                                 <div className='all-options'>
-                                    <p className={`arrow ${userHasUpvoted ? 'upvoted' : ''}`} onClick={handleUpvote}>▲</p>
-                                    <p className='arrow'>{like}</p>
-                                    <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p>
+                                    <div className='all-option'>
+                                        <p className={`arrow ${userHasUpvoted ? 'upvoted' : ''}`} onClick={handleUpvote}>▲</p>
+                                        <p className='arrow'>{like}</p>
+                                        <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p>
+                                    </div>
+                                    <div className='all-option'>
+                                        <small>{blog.view} Views</small>
+                                    </div>
                                 </div>
+
                             </div>
                             <div className='blog-answer'>
                                 {ReactHtmlParser(blog.body)}

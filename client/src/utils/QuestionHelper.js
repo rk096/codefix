@@ -96,7 +96,7 @@ export const getQuestionById = async (id) => {
         }
 
         const formattedResponse = await response.json();
-       console.log("Response from backend:", formattedResponse);
+    //    console.log("Response from backend:", formattedResponse);
         return formattedResponse;
     } catch (error) {
         console.error("Error fetching question:", error);

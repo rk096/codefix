@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
 import TagInput from './TagInput';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addblog } from '../../utils/BlogHelper';
 
 
@@ -15,10 +15,6 @@ function Index() {
     const navigate = useNavigate();
 
     const handleBlog = () => {
-
-        // console.log("title", title);
-        // console.log("body", body);
-        // console.log("tags", tags);
         if (title && body && tags && title.trim() !== '' && body.trim() !== '' && tags.length > 0) {
             const blog = { title, body, tags };
             console.log(blog);
@@ -28,13 +24,10 @@ function Index() {
             console.error('Insufficient details to add question.');
             alert("please fill all fields")
         }
-
-
-
     }
 
     const handleCancle = () => {
-        navigate("/");
+        navigate("/blogs");
     }
 
     const handleChange = (e) => {

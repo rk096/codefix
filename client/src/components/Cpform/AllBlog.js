@@ -40,7 +40,7 @@ function AllBlogs({ data}) {
                         </div>
 
                         <div className='all-option'>
-                            <small>0 Views</small>
+                            <small>{data.view} Views</small>
                         </div>
                     </div>
                 </div>
