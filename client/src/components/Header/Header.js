@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import './css/Header.css'
 import SearchIcon from '@mui/icons-material/Search';
 import { Avatar } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { getAllUsers } from '../../utils/UserHelper.js';
 import { getAllQuestions } from '../../utils/QuestionHelper.js';
 import { getAllBlogs } from '../../utils/BlogHelper.js';
@@ -131,7 +131,8 @@ function SearchComponent() {
 }
 
 function Header() {
-
+  const location = useLocation();
+  const isAuthRoute = location.pathname === "/auth";
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
@@ -153,20 +154,20 @@ function Header() {
       <div className='header-container'>
 
         <div className='header-left'>
-          <Link to='/'>
-            <img src="\hotfixlogo.jpg" alt='logo' style={{ borderRadius: '50%', width: '50px', height: '50px' }} />
+          <Link to='/' className='headerlink'>
+            <img src="\hotfixlogo.jpg" alt='logo' style={{ borderRadius: '50%', width: '50px', height: '50px' }}/>
             <span>HotFix</span>
           </Link>
         </div>
 
-        <SearchComponent />
+        {isAuthRoute ? null : <SearchComponent />}
 
         <div className='header-right'>
           <div className='header-right-container'>
             {user ?
               (
                 <>
-                  <Link to={`/user/${userData?._id}`}>
+                  <Link to={`/user/${userData?._id}`} className='avtlink'>
                     <Avatar style={{ marginRight: "10px" }}>{userData?.username?.charAt(0)}</Avatar>
                   </Link>
                   <Link onClick={handleLogout} className='nav-item nav-links'>Log out</Link>

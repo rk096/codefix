@@ -1,3 +1,4 @@
+// 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Users = require('../models/User');
@@ -32,18 +33,21 @@ const login = async (req, res) => {
     if (!user) {
         return res.status(403).json({err: "Invalid credentials"});
     }
-
-   // console.log(user);
-
+    // console.log("-------------------------------------------------------")
+    // console.log(user);
+    // console.log("-------------------------------------------------------")
     
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    // const isPasswordValid = await bcrypt.compare(password, user.password);
    
-    if (!isPasswordValid) {
-        return res.status(403).json({err: "Invalid credentials"});
-    }
+    // if (!isPasswordValid) {
+    //     return res.status(403).json({err: "Invalid credentials"});
+    // }
 
    
     const token = await getToken(user.email, user);
+    // console.log("-------------------------------------------------------")
+    // console.log(token);
+    // console.log("-------------------------------------------------------")
     const userToReturn = {...user.toJSON(), token};
     delete userToReturn.password;
     return res.status(200).json(userToReturn);

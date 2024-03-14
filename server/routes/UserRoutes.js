@@ -58,7 +58,8 @@ router.put(
         try {
         const { id } = req.params;
         const { username, password, bio } = req.body;
-        const updatedusr = await UserModel.findByIdAndUpdate(id, {username: username, password: password, bio: bio}, { new: true });
+        // const hashPassword = await bcrypt.hash(password, 12);
+        const updatedusr = await UserModel.findByIdAndUpdate(id, {username: username, bio: bio}, { new: true });
         return res.status(200).json(updatedusr);
     }catch(error){
         console.error("Error updating user");

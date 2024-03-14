@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material'
+import { Avatar, IconButton} from '@mui/material'
 import React from 'react'
 import 'react-quill/dist/quill.snow.css';
 import './index.css';
@@ -10,6 +10,8 @@ import { getUser, getUserByEmail } from '../../utils/UserHelper';
 import { addComment, AllcommentsByBlog, deleteComment } from '../../utils/CommentHelper';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 function MainBlog({ id }) {
 
@@ -62,6 +64,10 @@ function MainBlog({ id }) {
             setAllComments(cmnts.comments);
         }
     };
+
+    const handleEditBlog = (id) => {
+        navigate(`/edit-blog/${id}`)
+    }
 
     const handleUpvote = async () => {
 
@@ -162,8 +168,24 @@ function MainBlog({ id }) {
 
                 <div className='main-desc'>
                     <div className='info'>
-                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-blog/${id}`}>edit</Link>)}</p>
-                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleBlogDelete(blog._id)}>delete</Link>)}</p>
+                    <p>
+                            {(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (
+                                <IconButton onClick={() => handleEditBlog(id)}>
+                                    <EditIcon />
+                                </IconButton>
+                            )}
+                        </p>
+
+                        <p>
+                            {(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (
+                                <IconButton onClick={() => handleBlogDelete(blog._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
+
+                        </p>
+                        {/* <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-blog/${id}`}>edit</Link>)}</p>
+                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleBlogDelete(blog._id)}>delete</Link>)}</p> */}
                     </div>
                 </div>
 
@@ -184,7 +206,7 @@ function MainBlog({ id }) {
 
                             </div>
                             <div className='blog-answer'>
-                                {ReactHtmlParser(truncate(blog.body, 200))}
+                                {ReactHtmlParser(blog.body)}
 
                                 <div className='author'>
                                     <small>asked "{blog.created_at.split("T")[0]}"</small>
@@ -202,7 +224,7 @@ function MainBlog({ id }) {
                                             <span><Link to={`/user/${cmnt.user}`}>{cmnt.name}</Link></span> : {cmnt.body}
                                                 <small> at {cmnt.created_at.split("T")[0]}</small>
                                             </p>
-                                            <p>{(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && (<Link onClick={() => handleCommentDelete(cmnt._id)}>delete</Link>)}</p>
+                                            <p>{(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && ( <Link onClick={() => handleCommentDelete(cmnt._id)} className="delete-link">delete</Link>)}</p>
                                         </div>
                                     ))}
 

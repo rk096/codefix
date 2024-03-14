@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material'
+import { Avatar, IconButton } from '@mui/material'
 import React, { useEffect } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -12,6 +12,8 @@ import { downvoteQuestion, getQuestionById, getvoteQuestion, upvoteQuestion, del
 import { addComment, AllcommentsByQuestion, deleteComment } from '../../utils/CommentHelper';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 function MainQuestion({ id }) {
 
@@ -114,6 +116,10 @@ function MainQuestion({ id }) {
         }
     };
 
+    const handleEditQuestion = (id) => {
+        navigate(`/edit-question/${id}`)
+    }
+
     const handleCommentDelete = async (cid) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this Comment?');
         if (confirmDelete) {
@@ -166,8 +172,29 @@ function MainQuestion({ id }) {
     useEffect(() => {
     }, [allanswer, allcomments, like]);
 
-    function truncate(str, n) {
-        return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+   
+
+    const [lines, setLines] = useState([]);
+
+    const splitStringIntoLines = (str, maxLength) => {
+        const words = str.split(' ');
+        let currentLine = '';
+        const lines = [];
+
+        words.forEach(word => {
+            if ((currentLine + word).length <= maxLength) {
+                currentLine += (currentLine ? ' ' : '') + word;
+            } else {
+                lines.push(currentLine);
+                currentLine = word;
+            }
+        });
+
+        if (currentLine) {
+            lines.push(currentLine);
+        }
+       
+        return lines;
     }
 
     return (
@@ -185,8 +212,28 @@ function MainQuestion({ id }) {
                 </div>
                 <div className='main-desc'>
                     <div className='info'>
-                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-question/${id}`}>edit</Link>)}</p>
-                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleQuestionDelete(ques._id)}>delete</Link>)}</p>
+
+                        <p>
+                            {(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (
+                                <IconButton onClick={() => handleEditQuestion(id)}>
+                                    <EditIcon />
+                                </IconButton>
+                            )}
+                        </p>
+
+                        <p>
+                            {(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (
+                                <IconButton onClick={() => handleQuestionDelete(ques._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
+
+                        </p>
+                        {/* <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-question/${id}`}>edit</Link>)}</p>  
+                      
+                      <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleQuestionDelete(ques._id)}>delete</Link>)}</p> */}
+
+
                     </div>
                 </div>
                 {ques && (
@@ -196,11 +243,11 @@ function MainQuestion({ id }) {
                                 <div className='all-options'>
                                     <p className={`arrow ${userHasUpvoted ? 'upvoted' : ''}`} onClick={handleUpvote}>▲</p>
                                     <p className='arrow'>{like}</p>
-                                    <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p> 
+                                    <p className={`arrow ${userHasDownvoted ? 'downvoted' : ''}`} onClick={handleDownvote}>▼</p>
                                 </div>
                             </div>
                             <div className='question-answer'>
-                                {ReactHtmlParser(truncate(ques.body, 200))}
+                                {ReactHtmlParser(ques.body)}
 
                                 <div className='author'>
                                     <small>asked "{ques.created_at.split("T")[0]}"</small>
@@ -219,7 +266,15 @@ function MainQuestion({ id }) {
                                                 <span><Link to={`/user/${cmnt.user}`}>{cmnt.name}</Link></span> : {cmnt.body}
                                                 <small> at {cmnt.created_at.split("T")[0]}</small>
                                             </p>
-                                            <p>{(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && (<Link onClick={() => handleCommentDelete(cmnt._id)}>delete</Link>)}</p>
+
+                                            <p>
+                                                {(authUser.email === 'moderator.hotfix@gmail.com' || cmnt.email === authUser.email) && (
+
+                                                    <Link onClick={() => handleCommentDelete(cmnt._id)} className="delete-link">delete</Link>
+
+                                                )}
+                                            </p>
+
                                         </div>
                                     ))}
 
@@ -265,25 +320,73 @@ function MainQuestion({ id }) {
 
                     {allanswer.length > 0 && allanswer.map((answer, index) => (
                         <div className='all-questions-container' key={index}>
-                            <div className='all-questions-left'>
-                                <div className='all-options'>
-                                <p>{(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (<Link onClick={() => handleAnswerDelete(answer._id)}>delete</Link>)}</p>
+                            <div className='all-questions-left' style={{ width: "1.5%" }}>
+                                <div className='all-options' >
+                                    {/* <IconButton onClick={() => handleAnswerDelete(answer._id)} aria-label="delete">
+                                                <DeleteIcon />
+                                            </IconButton> */}
+
+                                    <p>
+                                        {(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (
+
+                                            <img src="/deleteicon2.png" alt="Delete Icon" className="delete-icon" onClick={() => handleAnswerDelete(answer._id)} />
+                                        )}
+                                    </p>
                                 </div>
                             </div>
-                            <div className='question-answer'>
-                                {ReactHtmlParser(truncate(answer.body, 200))}
+                            <div className='answer-body'>
+                            <p className="answer-content"> {ReactHtmlParser(answer.body)}</p>
+                               
                                 <div className='author'>
                                     <small>{answer.created_at.split("T")[0]}</small>
                                     <div className='auth-details'>
                                     </div>
+
                                     <Link to={`/user/${answer.user}`}>
-                                        {answer.name}
+                                        <Avatar>{answer.name?.charAt(0)}</Avatar>
+                                        <span>{answer.name}</span>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
+
+                {/* {allanswer.length > 0 && allanswer.map((answer, index) => (
+                        <div className='answer-body' key={index}>
+
+                           
+
+                            <div className='all-questions-left'>
+                                <div className='all-options'>
+
+                                    {(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (
+                                        <p>
+                                            <IconButton onClick={() => handleAnswerDelete(answer._id)} aria-label="delete">
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className='question-answer'>
+                                
+                                {ReactHtmlParser(truncate(answer.body, 200))}
+                                <div className='author'>
+                                    <small>{answer.created_at.split("T")[0]}</small>
+                                    <div className='auth-details'>
+                                    </div>
+                                    <Link to={`/user/${answer.user}`}>
+                                        <Avatar>{answer.name?.charAt(0)}</Avatar>
+                                        <p>{answer.name}</p>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div> */}
+
 
                 <div className='main-answer'>
                     <h3 style={{

@@ -139,9 +139,9 @@ function Main() {
     } else if (latestOrderBlg === 'desc') {
       return (new Date(b.created_at) - new Date(a.created_at));
     } else if (viewOrderBlg === 'asc') {
-      return (a.view - b.view); // complete it
+      return (a.view - b.view);
     } else if (viewOrderBlg === 'desc') {
-      return (b.view - a.view); // complete it
+      return (b.view - a.view);
     }
     else {
       return 0; // No sorting
@@ -214,16 +214,16 @@ function Main() {
                 <Button onClick={isBlogRoute ? (handleLatestOrderBlg) : (handleLatestOrderQue)}>Latest</Button>
               </div>
               <div className="main-tab">
-                <Button onClick={isBlogRoute ? (handleVoteOrderBlg) : (handleVoteOrderQue)}>Voted</Button>
+                <Button onClick={isBlogRoute ? (handleVoteOrderBlg) : (handleVoteOrderQue)}>Votes</Button>
               </div>
               {
                 isBlogRoute ? (
                   <div className="main-tab">
-                    <Button onClick={handleViewOrderBlg}>Viewed</Button>
+                    <Button onClick={handleViewOrderBlg}>Views</Button>
                   </div>
                 ) : (
                   <div className="main-tab">
-                    <Button onClick={handleAnsweredOrderQue}>Answered</Button>
+                    <Button onClick={handleAnsweredOrderQue}>Answers</Button>
                   </div>
                 )
               }

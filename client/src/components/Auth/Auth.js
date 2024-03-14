@@ -63,7 +63,7 @@ const Auth = () => {
         })
         .catch((error) => {
           console.error('Error creating user:', error.code, error.message);
-          setError(error.message);
+          setError("User already exists, use different email !");
           setLoading(false);
         });
     }
@@ -78,7 +78,6 @@ const Auth = () => {
       setLoading(false);
     } else {
       await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
-
         const user = userCredential.user;
 
         const additionalInfo = {
@@ -103,7 +102,7 @@ const Auth = () => {
 
       }).catch((error) => {
         console.log(error.code);
-        setError(error.message);
+        setError("Invalid credentials !");
         setLoading(false);
       })
     }
@@ -182,9 +181,3 @@ const Auth = () => {
 }
 
 export default Auth
-
-
-
-
-
-

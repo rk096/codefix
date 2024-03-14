@@ -77,8 +77,8 @@ a:hover{
     color: #000;
 }
  */
-
- .sidebar {
+/*****************************************************/
+ /* .sidebar {
     display: flex;
     padding: 20px 0px 10px 10px;
     height: 100%;
@@ -156,5 +156,78 @@ a:hover{
   
   .tags > p:hover {
     color: #000;
-  }
+  } */
   
+/***************************************/
+
+.sidebar {
+  display: flex;
+  padding: 20px 0px 10px 10px;
+  height: 100%;
+  border-right: 1px solid #ddd;
+  flex: 0.5;
+  max-width: 200px;
+}
+
+.sidebar-container {
+  margin: 10px 0;
+  display: flex;
+  width: 100%;
+}
+
+.sidebar-options {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  font-weight: 400px;
+}
+
+.sidebar-option {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.534);
+}
+
+.link:hover {
+  color: #000;
+}
+
+.icon {
+  font-size: 18px;
+  margin-right: 15px;
+  color:rgba(0, 0, 0, 0.534);
+}
+
+.link p {
+  color: rgba(0, 0, 0, 0.534);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.link p:hover {
+  color: #000;
+}
+
+.link-tag {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  width: 100%;
+}
+
+.link-tag:hover {
+  border-right: 5px solid rgb(197, 196, 194);
+}
+
+.link-platform{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}

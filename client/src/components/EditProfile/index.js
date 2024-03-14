@@ -1,12 +1,15 @@
 import './index.css';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { updateUser, getUser } from '../../utils/UserHelper';
 import React, { useState, useEffect } from 'react';
 import { getAuth, updatePassword } from 'firebase/auth';
 import { IconButton } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/userSlice';
 
 function Index() {
+    const authUser = useSelector(selectUser);
     const { id } = useParams();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -55,6 +58,10 @@ function Index() {
         }
     }
 
+    const handleCancle = () => {
+        navigate(`/user/${id}`);
+    }
+
     return (
         <div className='add-user'>
             <div className='add-user-container'>
@@ -101,8 +108,10 @@ function Index() {
 
                     </div>
                 </div>
+                <div className='button-container'>
                 <button className='button' onClick={handleUpdateUser}>Edit user</button>
-                <Link to={`/user/${id}`}>Cancel</Link>
+                <button className='button' onClick={handleCancle}>Cancel</button>
+                </div>
             </div>
         </div>
     )
