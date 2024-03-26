@@ -99,7 +99,8 @@ function EditPassword() {
     }
 
     const passwordIsValid = (password) => {
-        return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+        var regex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
+        return regex.test(password);
     };
 
     return (

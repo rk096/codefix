@@ -162,6 +162,11 @@ function MainBlog({ id }) {
                             <Link to='/add-blog'>
                                 <button>Add Blog</button>
                             </Link>
+                            <div className='tags-info'>
+                                {blog.tags.map((tag) =>
+                                    <span className='question-tag'>{tag}</span>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>
@@ -184,8 +189,6 @@ function MainBlog({ id }) {
                             )}
 
                         </p>
-                        {/* <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-blog/${id}`}>edit</Link>)}</p>
-                        <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleBlogDelete(blog._id)}>delete</Link>)}</p> */}
                     </div>
                 </div>
 

@@ -66,7 +66,7 @@ const UserProfile = () => {
               <div className='user-info'>
                 <h2>{userProfile.username}</h2>
                 <p>{userProfile.email}</p>
-                <p>{userProfile.bio ? userProfile.bio : 'no bio'}</p>
+                <p><em>{userProfile.bio ? userProfile.bio : 'no bio'}</em></p>
               </div>
             </div>
 

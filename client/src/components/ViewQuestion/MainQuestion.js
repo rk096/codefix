@@ -171,31 +171,7 @@ function MainQuestion({ id }) {
 
     useEffect(() => {
     }, [allanswer, allcomments, like]);
-
-   
-
-    const [lines, setLines] = useState([]);
-
-    const splitStringIntoLines = (str, maxLength) => {
-        const words = str.split(' ');
-        let currentLine = '';
-        const lines = [];
-
-        words.forEach(word => {
-            if ((currentLine + word).length <= maxLength) {
-                currentLine += (currentLine ? ' ' : '') + word;
-            } else {
-                lines.push(currentLine);
-                currentLine = word;
-            }
-        });
-
-        if (currentLine) {
-            lines.push(currentLine);
-        }
-       
-        return lines;
-    }
+    
 
     return (
         <div className='main'>
@@ -207,6 +183,11 @@ function MainQuestion({ id }) {
                             <Link to='/add-question'>
                                 <button>Ask Question</button>
                             </Link>
+                            <div className='tags-info'>
+                                {ques.tags.map((tag) =>
+                                    <span className='question-tag'>{tag}</span>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>
@@ -229,9 +210,6 @@ function MainQuestion({ id }) {
                             )}
 
                         </p>
-                        {/* <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-question/${id}`}>edit</Link>)}</p>  
-                      
-                      <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleQuestionDelete(ques._id)}>delete</Link>)}</p> */}
 
 
                     </div>
