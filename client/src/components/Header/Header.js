@@ -15,7 +15,8 @@ import Modal from 'react-modal';
 // Modal.setAppElement('#root');
 
 function SearchComponent() {
-
+  const location = useLocation();
+  const isAuthRoute = location.pathname === "/auth";
   const [search, setSearch] = useState('');
   const [queResults, setQueResults] = useState([]);
   const [blgResults, setBlgResults] = useState([]);
@@ -78,7 +79,7 @@ function SearchComponent() {
       <div className='header-middle'>
         <div className='header-search-container' onClick={openModal}>
           <SearchIcon />
-          <input ref={inputRef} type='text' placeholder='Search...'
+          <input ref={inputRef} type='text' placeholder='Search...' disabled={isAuthRoute ? true : false}
             value={search} onChange={e => {
               setSearch(e.target.value);
             }}
@@ -131,8 +132,6 @@ function SearchComponent() {
 }
 
 function Header() {
-  const location = useLocation();
-  const isAuthRoute = location.pathname === "/auth";
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
@@ -160,7 +159,7 @@ function Header() {
           </Link>
         </div>
 
-        {isAuthRoute ? null : <SearchComponent />}
+        <SearchComponent />
 
         <div className='header-right'>
           <div className='header-right-container'>

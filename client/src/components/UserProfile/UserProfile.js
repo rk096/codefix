@@ -6,7 +6,6 @@ import ReactHtmlParser from "react-html-parser";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
 import Sidebar from '../Cpform/Sidebar';
-import { Avatar } from '@mui/material';
 
 
 const UserProfile = () => {
@@ -53,10 +52,6 @@ const UserProfile = () => {
     navigate(`/edit-user/${id}`);
   }
 
-  function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-}
-
 
   return (
     <>
@@ -65,14 +60,13 @@ const UserProfile = () => {
           <Sidebar />
           <div className="user-profile-container">
             <div className="user-detail">
-              {/* <Avatar className='css-2s90m6-MuiAvatar-root userimg' >{userProfile.username ? userProfile.username.charAt(0) : null}</Avatar> */}
               <div className='userimg'>
               <p>{userProfile.username ? userProfile.username.charAt(0) : null}</p>
               </div>
               <div className='user-info'>
                 <h2>{userProfile.username}</h2>
-                <p>{userProfile.bio}</p>
                 <p>{userProfile.email}</p>
+                <p>{userProfile.bio ? userProfile.bio : 'no bio'}</p>
               </div>
             </div>
 
