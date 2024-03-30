@@ -9,6 +9,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 function EditDetails({ id }) {
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -24,7 +25,7 @@ function EditDetails({ id }) {
             const usr = { username, bio };
             await updateUser(id, usr);
             alert('Details updated successfully!');
-            // navigate(`/user/${id}`);
+            navigate(`/user/${id}`);
         }
         else {
             console.error('Insufficient details to update user.');
@@ -103,6 +104,8 @@ function EditPassword() {
         return regex.test(password);
     };
 
+    
+
     return (
         <>
             <div className='user-container'>
@@ -153,6 +156,7 @@ function EditPassword() {
             <div className='btn-container'>
                 <button className='btn' onClick={handleUpdatePassword}>Save</button>
             </div>
+            
         </>
     );
 }
@@ -184,6 +188,7 @@ function Index() {
                     <h1 className='goback'>
                         <button onClick={handleCancle}>Cancel</button>
                     </h1>
+                    
                 </div>
                 {menuOptions ? <EditDetails id={id} /> : <EditPassword />}
 

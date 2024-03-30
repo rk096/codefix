@@ -16,6 +16,7 @@ const createUser = async (userData) => {
           }
       
           const data = await response.json();
+          console.log(data);
           return data;
     }
     catch (error) {
@@ -39,6 +40,7 @@ const loginUser = async (userData) => {
           }
           
           const data = await response.json();
+          // console.log(data);
           return data;
     }
     catch (error) {

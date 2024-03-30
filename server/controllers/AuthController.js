@@ -16,7 +16,10 @@ const signup = async (req, res) => {
         const newUser = await Users.create({ username, email, password: hashPassword });
         const token = await getToken(email, newUser);
         const userToReturn = { ...newUser.toJSON(), token };
-        //console.log(userToReturn);
+        console.log("-------------------------------------------------------")
+        console.log(userToReturn);
+        console.log("-------------------------------------------------------")
+      
         delete userToReturn.password;
         return res.status(200).json(userToReturn);
     } catch (error) {
@@ -45,9 +48,9 @@ const login = async (req, res) => {
 
    
     const token = await getToken(user.email, user);
-    // console.log("-------------------------------------------------------")
-    // console.log(token);
-    // console.log("-------------------------------------------------------")
+    console.log("-------------------------------------------------------")
+    console.log(token);
+    console.log("-------------------------------------------------------")
     const userToReturn = {...user.toJSON(), token};
     delete userToReturn.password;
     return res.status(200).json(userToReturn);
