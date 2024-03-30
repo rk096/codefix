@@ -27,12 +27,21 @@ const Auth = () => {
     setIsSignup(!isSignup)
   }
 
+  const passwordIsValid = (password) => {
+    var regex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
+    return regex.test(password);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     if (email === "" || password === "" || username === "") {
       setError("Required field is missing");
+      setLoading(false);
+    }
+    else if (!passwordIsValid(password)) {
+      setError("Password must be 8 character long (1 number and 1 letter)!");
       setLoading(false);
     }
     else {

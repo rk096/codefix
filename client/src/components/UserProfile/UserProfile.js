@@ -6,9 +6,12 @@ import ReactHtmlParser from "react-html-parser";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/userSlice';
 import Sidebar from '../Cpform/Sidebar';
+<<<<<<< HEAD
 import { IconButton} from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+=======
+>>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
 
 
 const UserProfile = () => {
@@ -55,6 +58,7 @@ const UserProfile = () => {
     navigate(`/edit-user/${id}`);
   }
 
+<<<<<<< HEAD
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
   }
@@ -64,6 +68,8 @@ const UserProfile = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+=======
+>>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
 
   return (
     <>
@@ -87,15 +93,23 @@ const UserProfile = () => {
               )}
             </div>
             <div className="user-detail">
+<<<<<<< HEAD
            
+=======
+>>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
               <div className='userimg'>
                 <p>{userProfile.username ? userProfile.username.charAt(0) : null}</p>
               </div>
               <div className='user-info'>
                 <h2>{userProfile.username}</h2>
+<<<<<<< HEAD
                 <p>{userProfile.bio ? userProfile.bio : "No bio available"}</p>
                 <p>{userProfile.email}</p>
                 
+=======
+                <p>{userProfile.email}</p>
+                <p><em>{userProfile.bio ? userProfile.bio : 'no bio'}</em></p>
+>>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
               </div>
             </div>
 

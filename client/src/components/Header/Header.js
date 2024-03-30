@@ -15,7 +15,8 @@ import Modal from 'react-modal';
 // Modal.setAppElement('#root');
 
 function SearchComponent() {
-
+  const location = useLocation();
+  const isAuthRoute = location.pathname === "/auth";
   const [search, setSearch] = useState('');
   const [queResults, setQueResults] = useState([]);
   const [blgResults, setBlgResults] = useState([]);
@@ -78,7 +79,7 @@ function SearchComponent() {
       <div className='header-middle'>
         <div className='header-search-container' onClick={openModal}>
           <SearchIcon />
-          <input ref={inputRef} type='text' placeholder='Search...'
+          <input ref={inputRef} type='text' placeholder='Search...' disabled={isAuthRoute ? true : false}
             value={search} onChange={e => {
               setSearch(e.target.value);
             }}
@@ -93,36 +94,40 @@ function SearchComponent() {
         style={{
           content: {
             position: 'absolute',
-            top: '40px',
-            left: '360px',
-            height: '360px',
-            width: '800px',
-            overflow: 'auto',
-            WebkitOverflowScrolling: 'touch',
+            top: '15%',
+            left: '20%',
+            height: '50%',
+            width: '60%',
             borderRadius: '4px',
             outline: 'none',
-            padding: '20px',
-            background: '#f4f4f4',
+            padding: '20px'
           }
         }}
       >
-        <div>
-          <h2 style={{ textAlign: 'left', borderBottom: '2px solid #000' }}>Search Results</h2>
-          <h4>Questions</h4>
-          {queResults.length === 0 ? <p>No results found</p> : null}
-          {queResults.map(result => (
-            <><Link to={`/question/${result._id}`} onClick={closeModal} key={result._id}>{result.title}</Link><br /></>
-          ))}
-          <h4>Blogs</h4>
-          {blgResults.length === 0 ? <p>No results found</p> : null}
-          {blgResults.map(result => (
-            <><Link to={`/blog/${result._id}`} onClick={closeModal} key={result._id}>{result.title}</Link><br /></>
-          ))}
-          <h4>Users</h4>
-          {usrResults.length === 0 ? <p>No results found</p> : null}
-          {usrResults.map(result => (
-            <><Link to={`/user/${result._id}`} onClick={closeModal} key={result._id}>{result.username}</Link><br /></>
-          ))}
+        <div className='search-content'>
+          <h2>Search Results</h2>
+          <div className='search-items'>
+            <h3>Questions</h3>
+            {queResults.length === 0 ? 
+                  <p>No results found</p> 
+                  : 
+                  (queResults.map(result => (<Link className='data-item' to={`/question/${result._id}`} onClick={closeModal} key={result._id}>{result.title}</Link>)))
+            }
+            
+            <h3>Blogs</h3>
+            {blgResults.length === 0 ? 
+                  <p>No results found</p> 
+                  : 
+                  (blgResults.map(result => (<Link className='data-item' to={`/blog/${result._id}`} onClick={closeModal} key={result._id}>{result.title}</Link>)))
+            }
+
+            <h3>Users</h3>
+            {usrResults.length === 0 ? 
+                  <p>No results found</p> 
+                  : 
+                  (usrResults.map(result => (<Link className='data-item' to={`/user/${result._id}`} onClick={closeModal} key={result._id}>{result.username}</Link>)))
+            }
+          </div>
         </div>
 
       </Modal>
@@ -131,8 +136,6 @@ function SearchComponent() {
 }
 
 function Header() {
-  const location = useLocation();
-  const isAuthRoute = location.pathname === "/auth";
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
@@ -155,12 +158,12 @@ function Header() {
 
         <div className='header-left'>
           <Link to='/' className='headerlink'>
-            <img src="\hotfixlogo.jpg" alt='logo' style={{ borderRadius: '50%', width: '50px', height: '50px' }}/>
-            <span>HotFix</span>
+            <img src="\hotfixlogo.jpg" alt='logo' style={{ borderRadius: '50%', width: '50px', height: '50px' }} />
           </Link>
+          <span>CodeFix</span>
         </div>
 
-        {isAuthRoute ? null : <SearchComponent />}
+        <SearchComponent />
 
         <div className='header-right'>
           <div className='header-right-container'>

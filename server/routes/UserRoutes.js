@@ -57,7 +57,7 @@ router.put(
     async (req, res) => {
         try {
         const { id } = req.params;
-        const { username, password, bio } = req.body;
+        const { username, bio } = req.body;
         // const hashPassword = await bcrypt.hash(password, 12);
         const updatedusr = await UserModel.findByIdAndUpdate(id, {username: username, bio: bio}, { new: true });
         return res.status(200).json(updatedusr);

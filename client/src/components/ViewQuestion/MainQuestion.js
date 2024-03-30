@@ -171,8 +171,12 @@ function MainQuestion({ id }) {
 
     useEffect(() => {
     }, [allanswer, allcomments, like]);
+<<<<<<< HEAD
 
    
+=======
+    
+>>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
 
     return (
         <div className='main'>
@@ -184,6 +188,11 @@ function MainQuestion({ id }) {
                             <Link to='/add-question'>
                                 <button>Ask Question</button>
                             </Link>
+                            <div className='tags-info'>
+                                {ques.tags.map((tag) =>
+                                    <span className='question-tag'>{tag}</span>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>
@@ -206,9 +215,6 @@ function MainQuestion({ id }) {
                             )}
 
                         </p>
-                        {/* <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link to={`/edit-question/${id}`}>edit</Link>)}</p>  
-                      
-                      <p>{(authUser.email === 'moderator.hotfix@gmail.com' || owner.email === authUser.email) && (<Link onClick={() => handleQuestionDelete(ques._id)}>delete</Link>)}</p> */}
 
 
                     </div>

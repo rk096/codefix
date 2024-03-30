@@ -36,17 +36,12 @@ header{
     cursor: pointer;
 }
 
-.header-left > h3 {
+.header-left span {
     font-weight: 400;
-    font-size: 14px;
-    margin: 0px 10px;
+    font-size: larger;
+    margin-top: 0px;
     cursor: pointer;
     padding: 5px 10px;
-}
-
-.header-left > h3:hover{
-    background-color: #ddd;
-    border-radius: 33px; 
 }
 
 .header-middle{
@@ -74,6 +69,32 @@ header{
 
 .header-search-container > .MuiSvgIcon-root{
     color: #ccc;
+}
+
+.search-content {
+    font-family: 'Popins';
+}
+
+.search-items {
+    overflow-y: auto;
+}
+
+.search-content > h2 {
+    padding-bottom: 10px;
+    border-bottom: solid 2px #000;
+    margin-bottom: 0;
+}
+
+.search-items .data-item {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    margin-bottom: 6px;
+    padding: 4px;
+    border-radius: 4px;
+    width: 98%;
+    background-color: #e1e1e1;
+
 }
 
 .header-right{
@@ -118,11 +139,6 @@ header{
 .avtlink{
     text-decoration: none;
 }
- /* @media screen and (max-width: 768px){
-    .header-middle{
-        display: none;
-    }
-} */
 
 @media screen and (min-width:768px){
     .header-middle{
