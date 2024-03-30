@@ -1,24 +1,26 @@
-/* .cp-index{
+.cp-index{
     display: flex;
     min-height: 88vh;
     min-width: fit-content;
 }
 
-.cp-index-content{
+.cp-index-content-user{
     display: flex;
   width: 100%;
   justify-content: center; 
-} */
+  margin-left: 150px;
+}
 
 
 
 .users-container {
-    flex: 1;
+    /* flex: 1; */
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-start;
     background-color:  #e7eaec;
+    z-index: 0;
 }
 
 .user-card {

@@ -174,29 +174,6 @@ function MainQuestion({ id }) {
 
    
 
-    const [lines, setLines] = useState([]);
-
-    const splitStringIntoLines = (str, maxLength) => {
-        const words = str.split(' ');
-        let currentLine = '';
-        const lines = [];
-
-        words.forEach(word => {
-            if ((currentLine + word).length <= maxLength) {
-                currentLine += (currentLine ? ' ' : '') + word;
-            } else {
-                lines.push(currentLine);
-                currentLine = word;
-            }
-        });
-
-        if (currentLine) {
-            lines.push(currentLine);
-        }
-       
-        return lines;
-    }
-
     return (
         <div className='main'>
             <div className='main-container'>

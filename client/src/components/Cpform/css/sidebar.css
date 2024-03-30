@@ -167,6 +167,7 @@ a:hover{
   border-right: 1px solid #ddd;
   flex: 0.5;
   max-width: 200px;
+  z-index: 1;
 }
 
 .sidebar-container {
@@ -185,9 +186,17 @@ a:hover{
 .sidebar-option {
   margin: 10px 0;
   font-size: 14px;
+  text-decoration: none;
 }
 
 .link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.534);
+}
+
+.link-plt{
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -219,6 +228,7 @@ a:hover{
   align-items: center;
   padding: 5px 0;
   width: 100%;
+  font-weight: 500;
 }
 
 .link-tag:hover {

@@ -24,7 +24,7 @@ const Users = () => {
   return (
     <>
       <div className='cp-index'>
-        <div className='cp-index-content'>
+        <div className='cp-index-content-user'>
           <Sidebar />
           <div className="users-container">
             {users.map((user) => (
