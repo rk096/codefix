@@ -171,12 +171,7 @@ function MainQuestion({ id }) {
 
     useEffect(() => {
     }, [allanswer, allcomments, like]);
-<<<<<<< HEAD
 
-   
-=======
-    
->>>>>>> 400b67aada60ce4cdf71eb77bc9388f7a348f0df
 
     return (
         <div className='main'>
