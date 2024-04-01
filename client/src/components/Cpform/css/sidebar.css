@@ -167,7 +167,7 @@ a:hover{
   border-right: 1px solid #ddd;
   flex: 0.5;
   max-width: 200px;
-  z-index: 1;
+  z-index: 0;
 }
 
 .sidebar-container {
