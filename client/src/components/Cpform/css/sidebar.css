@@ -167,6 +167,10 @@ a:hover{
   border-right: 1px solid #ddd;
   flex: 0.5;
   max-width: 200px;
+<<<<<<< HEAD
+=======
+  z-index: 0;
+>>>>>>> c9cce46ab4145f19bdfc32148634723a2bdd0db1
 }
 
 .sidebar-container {
