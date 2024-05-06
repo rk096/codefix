@@ -19,10 +19,11 @@
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-start;
-    background-color:  #e7eaec;
-    z-index: 0;
+    background-color: #e7eaec;
     height: 100%;
-    width: 100%;
+    z-index: 0;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
 .user-card {
@@ -35,6 +36,7 @@
     /* align-items: center; */
     justify-content: center;
     background-color: white;
+
 }
 
 .profile-pic {

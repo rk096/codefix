@@ -300,7 +300,9 @@ function MainQuestion({ id }) {
                         <div className='all-questions-container' key={index}>
                             <div className='all-questions-left' style={{ width: "1.5%" }}>
                                 <div className='all-options' >
-                                    
+                                    {/* <IconButton onClick={() => handleAnswerDelete(answer._id)} aria-label="delete">
+                                                <DeleteIcon />
+                                            </IconButton> */}
 
                                     <p>
                                         {(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (
@@ -328,6 +330,40 @@ function MainQuestion({ id }) {
                     ))}
                 </div>
 
+                {/* {allanswer.length > 0 && allanswer.map((answer, index) => (
+                        <div className='answer-body' key={index}>
+
+                           
+
+                            <div className='all-questions-left'>
+                                <div className='all-options'>
+
+                                    {(authUser.email === 'moderator.hotfix@gmail.com' || answer.email === authUser.email) && (
+                                        <p>
+                                            <IconButton onClick={() => handleAnswerDelete(answer._id)} aria-label="delete">
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className='question-answer'>
+                                
+                                {ReactHtmlParser(truncate(answer.body, 200))}
+                                <div className='author'>
+                                    <small>{answer.created_at.split("T")[0]}</small>
+                                    <div className='auth-details'>
+                                    </div>
+                                    <Link to={`/user/${answer.user}`}>
+                                        <Avatar>{answer.name?.charAt(0)}</Avatar>
+                                        <p>{answer.name}</p>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div> */}
 
 
                 <div className='main-answer'>

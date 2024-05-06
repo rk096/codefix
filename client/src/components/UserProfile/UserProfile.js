@@ -9,10 +9,9 @@ import Sidebar from '../Cpform/Sidebar';
 import { IconButton} from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { useCookies } from 'react-cookie';
 import { signOut } from "firebase/auth";
 import { auth } from '../../firebase.js';
-
+import { useCookies } from 'react-cookie';
 
 const UserProfile = () => {
   const authUser = useSelector(selectUser);
@@ -21,8 +20,8 @@ const UserProfile = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [userBlogs, setUserBlogs] = useState([]);
   const [userQuestions, setUserQuestions] = useState([]);
-  const navigate = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
