@@ -9,6 +9,9 @@ import Sidebar from '../Cpform/Sidebar';
 import { IconButton} from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { useCookies } from 'react-cookie';
+import { signOut } from "firebase/auth";
+import { auth } from '../../firebase.js';
 
 
 const UserProfile = () => {
@@ -19,6 +22,7 @@ const UserProfile = () => {
   const [userBlogs, setUserBlogs] = useState([]);
   const [userQuestions, setUserQuestions] = useState([]);
   const navigate = useNavigate();
+  const [, , removeCookie] = useCookies(["token"]);
 
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -47,7 +51,9 @@ const UserProfile = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this account?');
     if (confirmDelete) {
       await deleteUser(id);
-      navigate('/');
+      await signOut(auth);
+      removeCookie("token");
+      navigate('/auth');
     }
   };
 
