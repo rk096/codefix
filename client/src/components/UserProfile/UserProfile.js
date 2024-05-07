@@ -9,7 +9,7 @@ import Sidebar from '../Cpform/Sidebar';
 import { IconButton} from '@mui/material';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { signOut } from "firebase/auth";
+import { signOut, deleteUser as firebaseDeleteUser } from "firebase/auth";
 import { auth } from '../../firebase.js';
 import { useCookies } from 'react-cookie';
 
@@ -49,19 +49,16 @@ const UserProfile = () => {
   const handleUserDelete = async (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this account?');
     if (confirmDelete) {
-      await deleteUser(id);
-      await signOut(auth);
-      removeCookie("token");
-      navigate('/auth');
-    }
+		await deleteUser(id);
+		await firebaseDeleteUser(auth.currentUser);
+        await signOut(auth);
+        removeCookie("token");
+        navigate('/auth');
+      }
   };
 
   const EditProfile = () => {
     navigate(`/edit-user/${id}`);
-  }
-
-  function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
   }
 
   const [activeTab, setActiveTab] = useState('questions');
@@ -85,7 +82,7 @@ const UserProfile = () => {
                
 
               )}
-              {authUser && (userProfile.email !== 'moderator.hotfix@gmail.com' && (authUser.email === 'moderator.hotfix@gmail.com' || authUser.email === userProfile.email)) && (
+              {authUser && (authUser.email !== 'moderator.hotfix@gmail.com' && authUser.email === userProfile.email) && (
                 <IconButton onClick={() => handleUserDelete(userProfile._id)}>
                                     <DeleteIcon />
                                 </IconButton>
