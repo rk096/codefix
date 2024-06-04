@@ -1,46 +1,67 @@
-# Getting Started with Create React App and Redux
+# CodeFix
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+Welcome to CodeFix, your one-stop platform for all programming-related concerns. Below is an overview of the modules and features of the CodeFix project:
 
-## Available Scripts
+## Modules
 
-In the project directory, you can run:
+### 1. User Module
+- Defines user information including email, password, username, and bio.
+- Enforces rules for signup, ensuring required fields are provided.
+- Allows users to login by checking credentials against the user table.
 
-### `npm start`
+### 2. Question Module
+- Fields for title, body, tags, creation date, and references to users who interacted with the question.
+- Establishes relationships with the "User" model for users who posted, upvoted, or downvoted the question.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 3. Answer Module
+- Includes fields for body, creation timestamp, and references to users and questions.
+- Ensures mandatory fields for substantive content.
+- Establishes relationships with the "User" and "Question" models.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 4. Blog Module
+- Fields for title, body, tags, creation date, view count, and references to users who interacted with the blog.
+- Establishes relationships with the "User" model for users who posted, upvoted, or downvoted the blog.
 
-### `npm test`
+### 5. Comment Module
+- Consists of fields for comment body, creation timestamp, and references to the user who posted the comment.
+- Can reference either a question or a blog post for association with specific content items.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- One platform for all programming-related concerns.
+- Users can manage their questions, answers, and blogs.
+- Easily track contribution activity.
+- Update profile information effortlessly.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To start using CodeFix, follow these steps:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started with CodeFix (MERN Stack)
 
-### `npm run eject`
+To start using CodeFix, a MERN (MongoDB, Express.js, React.js, Node.js) stack application, follow these steps:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Clone Repository**: Clone this repository to your local machine.
+   git clone <repository_url>
+   
+2. **Set Up Database**: Set up your MongoDB database according to the provided schema. You can use tools like MongoDB Compass or the mongo shell to create your database and collections.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Configure Database Connection**: Navigate to the server directory (cd server) and configure your database connection settings in the .env file. Ensure you have the           correct MongoDB URI specified.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. **Install Dependencies**: Navigate to the root directory of the project and install the necessary dependencies for both the server and the client.
+   npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+5. **Start the Server with Nodemon**: In the server directory, start the Node.js server using nodemon for automatic server restarts during development.
 
-## Learn More
+6. **Start the Client**: In a separate terminal, navigate to the client directory and start the React.js client.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Access CodeFix: Open your web browser and navigate to http://localhost:3000 to access the CodeFix application. You should now be able to use the application to manage questions, answers, blogs, and comments.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contributing
+
+We welcome contributions from the community to improve CodeFix. If you'd like to contribute, please follow these guidelines:
+- Fork the repository and create a new branch for your feature or bug fix.
+- Commit your changes with clear and descriptive messages.
+- Submit a pull request detailing the changes you've made and why they're beneficial.
+
+
